@@ -3192,6 +3192,7 @@ id beginning
 id bestChoice
 id blocking
 id bottom
+id bottomButtonsLayout
 id bounce
 id bounceBoth
 id bounceEnd
@@ -3578,6 +3579,7 @@ id transition_pause_alpha
 id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
+id translationScroll
 id translationText
 id triangle
 id unchecked
