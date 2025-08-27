@@ -25,10 +25,10 @@ com.example.wordtrainer.app-jetified-emoji2-1.3.0-23 C:\Users\Sasha\.gradle\cach
 com.example.wordtrainer.app-jetified-startup-runtime-1.1.1-24 C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\e487995f01f7ad89dab9efddc1a31566\transformed\jetified-startup-runtime-1.1.1\res
 com.example.wordtrainer.app-material-1.12.0-25 C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\ef429fcda679bec0c86190c88198be13\transformed\material-1.12.0\res
 com.example.wordtrainer.app-jetified-activity-1.8.0-26 C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\f73602ee11fa0e9845c583239bd94334\transformed\jetified-activity-1.8.0\res
-com.example.wordtrainer.app-pngs-27 C:\Users\Sasha\Desktop\WordTrainerApp\app\build\generated\res\pngs\debug
-com.example.wordtrainer.app-resValues-28 C:\Users\Sasha\Desktop\WordTrainerApp\app\build\generated\res\resValues\debug
-com.example.wordtrainer.app-packageDebugResources-29 C:\Users\Sasha\Desktop\WordTrainerApp\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.example.wordtrainer.app-packageDebugResources-30 C:\Users\Sasha\Desktop\WordTrainerApp\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.example.wordtrainer.app-debug-31 C:\Users\Sasha\Desktop\WordTrainerApp\app\build\intermediates\merged_res\debug\mergeDebugResources
-com.example.wordtrainer.app-debug-32 C:\Users\Sasha\Desktop\WordTrainerApp\app\src\debug\res
-com.example.wordtrainer.app-main-33 C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\res
+com.example.wordtrainer.app-pngs-27 C:\WordTrainerApp\app\build\generated\res\pngs\debug
+com.example.wordtrainer.app-resValues-28 C:\WordTrainerApp\app\build\generated\res\resValues\debug
+com.example.wordtrainer.app-packageDebugResources-29 C:\WordTrainerApp\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.wordtrainer.app-packageDebugResources-30 C:\WordTrainerApp\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.wordtrainer.app-debug-31 C:\WordTrainerApp\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.example.wordtrainer.app-debug-32 C:\WordTrainerApp\app\src\debug\res
+com.example.wordtrainer.app-main-33 C:\WordTrainerApp\app\src\main\res

@@ -9,9 +9,11 @@ color white
 id nextBtn
 id prevBtn
 id showTranslationBtn
+id switchSourceBtn
 id translationText
 id wordText
 layout activity_main
+raw words
 string app_name
 style Theme.WordTrainerApp
 style Theme.WordTrainerApp2

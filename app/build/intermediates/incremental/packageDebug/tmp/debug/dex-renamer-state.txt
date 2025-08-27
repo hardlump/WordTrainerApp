@@ -1,7 +1,7 @@
-#Tue Aug 26 23:42:21 VLAT 2025
-base.0=C\:\\Users\\Sasha\\Desktop\\WordTrainerApp\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
-base.1=C\:\\Users\\Sasha\\Desktop\\WordTrainerApp\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
-base.2=C\:\\Users\\Sasha\\Desktop\\WordTrainerApp\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\11\\classes.dex
+#Wed Aug 27 19:47:08 VLAT 2025
+base.0=C\:\\WordTrainerApp\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=C\:\\WordTrainerApp\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.2=C\:\\WordTrainerApp\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\11\\classes.dex
 path.0=classes.dex
 path.1=0/classes.dex
 path.2=11/classes.dex

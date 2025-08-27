@@ -34,6 +34,25 @@
             "outputFile": "com.example.wordtrainer.app-debug-31:/values_values.arsc.flat",
             "map": [
                 {
+                    "source": "C:\\WordTrainerApp\\app\\src\\main\\res\\values\\themes-night.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "17",
+                        "endLines": "4",
+                        "endColumns": "12",
+                        "endOffsets": "180"
+                    },
+                    "to": {
+                        "startLines": "6548",
+                        "startColumns": "4",
+                        "startOffsets": "459739",
+                        "endLines": "6550",
+                        "endColumns": "12",
+                        "endOffsets": "459902"
+                    }
+                },
+                {
                     "source": "C:\\Users\\Sasha\\.gradle\\caches\\9.0-milestone-1\\transforms\\53dea3b0ba48804bed1b4be85bc8caac\\transformed\\recyclerview-1.1.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10",
@@ -67,6 +86,25 @@
                         "startOffsets": "121981,124204",
                         "endColumns": "41,59",
                         "endOffsets": "122018,124259"
+                    }
+                },
+                {
+                    "source": "C:\\WordTrainerApp\\app\\src\\main\\res\\values\\themes.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "64",
+                        "endLines": "7",
+                        "endColumns": "12",
+                        "endOffsets": "445"
+                    },
+                    "to": {
+                        "startLines": "6542",
+                        "startColumns": "4",
+                        "startOffsets": "459355",
+                        "endLines": "6547",
+                        "endColumns": "12",
+                        "endOffsets": "459734"
                     }
                 },
                 {
@@ -108,23 +146,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Sasha\\Desktop\\WordTrainerApp\\app\\src\\main\\res\\values\\colors.xml",
-                    "from": {
-                        "startLines": "6,2,3,4,5,7",
-                        "startColumns": "4,4,4,4,4,4",
-                        "startOffsets": "195,17,62,107,152,235",
-                        "endColumns": "39,44,44,44,42,39",
-                        "endOffsets": "230,57,102,147,190,270"
-                    },
-                    "to": {
-                        "startLines": "641,948,949,950,961,964",
-                        "startColumns": "4,4,4,4,4,4",
-                        "startOffsets": "32859,55715,55760,55805,56547,56711",
-                        "endColumns": "39,44,44,44,42,39",
-                        "endOffsets": "32894,55755,55800,55845,56585,56746"
-                    }
-                },
-                {
                     "source": "C:\\Users\\Sasha\\.gradle\\caches\\9.0-milestone-1\\transforms\\5929a206e11ffab197a2c5a47b357869\\transformed\\lifecycle-runtime-2.6.2\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2",
@@ -139,23 +160,6 @@
                         "startOffsets": "124161",
                         "endColumns": "42",
                         "endOffsets": "124199"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Sasha\\Desktop\\WordTrainerApp\\app\\src\\main\\res\\values\\strings.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "17",
-                        "endColumns": "49",
-                        "endOffsets": "62"
-                    },
-                    "to": {
-                        "startLines": "1983",
-                        "startColumns": "4",
-                        "startOffsets": "131217",
-                        "endColumns": "49",
-                        "endOffsets": "131262"
                     }
                 },
                 {
@@ -175,25 +179,6 @@
                         "endLines": "35,652,653,654,655,1047,1048,1049,2185,5535,5538,5541,10256",
                         "endColumns": "51,60,61,61,63,58,56,53,12,12,12,12,24",
                         "endOffsets": "1687,33727,33789,33851,33915,62319,62376,62430,155404,389334,389460,389588,676849"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Sasha\\Desktop\\WordTrainerApp\\app\\src\\main\\res\\values\\themes-night.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "17",
-                        "endLines": "4",
-                        "endColumns": "12",
-                        "endOffsets": "180"
-                    },
-                    "to": {
-                        "startLines": "6548",
-                        "startColumns": "4",
-                        "startOffsets": "459739",
-                        "endLines": "6550",
-                        "endColumns": "12",
-                        "endOffsets": "459902"
                     }
                 },
                 {
@@ -305,6 +290,40 @@
                     }
                 },
                 {
+                    "source": "C:\\WordTrainerApp\\app\\src\\main\\res\\values\\strings.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "17",
+                        "endColumns": "49",
+                        "endOffsets": "62"
+                    },
+                    "to": {
+                        "startLines": "1983",
+                        "startColumns": "4",
+                        "startOffsets": "131217",
+                        "endColumns": "49",
+                        "endOffsets": "131262"
+                    }
+                },
+                {
+                    "source": "C:\\WordTrainerApp\\app\\src\\main\\res\\values\\colors.xml",
+                    "from": {
+                        "startLines": "6,2,3,4,5,7",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "195,17,62,107,152,235",
+                        "endColumns": "39,44,44,44,42,39",
+                        "endOffsets": "230,57,102,147,190,270"
+                    },
+                    "to": {
+                        "startLines": "641,948,949,950,961,964",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "32859,55715,55760,55805,56547,56711",
+                        "endColumns": "39,44,44,44,42,39",
+                        "endOffsets": "32894,55755,55800,55845,56585,56746"
+                    }
+                },
+                {
                     "source": "C:\\Users\\Sasha\\.gradle\\caches\\9.0-milestone-1\\transforms\\679e114cf4eb51f1f99522c5c3c85e68\\transformed\\fragment-1.5.4\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,3,4,5,10",
@@ -321,25 +340,6 @@
                         "endLines": "1809,1842,1882,11488,11492",
                         "endColumns": "56,64,63,24,24",
                         "endOffsets": "120665,122360,124427,724950,725099"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Sasha\\Desktop\\WordTrainerApp\\app\\src\\main\\res\\values\\themes.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "64",
-                        "endLines": "7",
-                        "endColumns": "12",
-                        "endOffsets": "445"
-                    },
-                    "to": {
-                        "startLines": "6542",
-                        "startColumns": "4",
-                        "startOffsets": "459355",
-                        "endLines": "6547",
-                        "endColumns": "12",
-                        "endOffsets": "459734"
                     }
                 },
                 {

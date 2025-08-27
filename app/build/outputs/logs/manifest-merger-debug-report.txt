@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:2:1-19:12
-INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:2:1-19:12
-INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:2:1-19:12
-INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:2:1-19:12
+ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:2:1-19:12
+INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:2:1-19:12
+INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:2:1-19:12
+INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:2:1-19:12
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\ef429fcda679bec0c86190c88198be13\transformed\material-1.12.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\86a333ac14130578da5c599cd80a72e2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.7.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\1164bebb5966fcabdedc0d10df8fb742\transformed\jetified-appcompat-resources-1.7.0\AndroidManifest.xml:2:1-7:12
@@ -46,16 +46,16 @@ MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\Sasha\.gradle\ca
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\dc391119723bbe7e33a60fec4e5090f0\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\e70ca82ca30d428a81ae24d596c5b9ad\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
 	package
-		INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml
 	android:versionCode
-		INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:2:11-69
+		ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:4:5-17:19
-INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:4:5-17:19
+ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:4:5-17:19
+INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:4:5-17:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\ef429fcda679bec0c86190c88198be13\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\ef429fcda679bec0c86190c88198be13\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\86a333ac14130578da5c599cd80a72e2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -73,37 +73,37 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Sa
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\e487995f01f7ad89dab9efddc1a31566\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\e487995f01f7ad89dab9efddc1a31566\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
 	android:extractNativeLibs
-		INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.1] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\cccdbeda96d69677b39e0d7d870b5301\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:7:9-35
+		ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:7:9-35
 	android:label
-		ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:6:9-41
+		ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:6:9-41
 	android:allowBackup
-		ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:5:9-35
+		ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:5:9-35
 	android:theme
-		ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:8:9-52
+		ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:8:9-52
 activity#com.example.wordtrainer.MainActivity
-ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:9:9-16:20
+ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:9:9-16:20
 	android:exported
-		ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:11:13-36
+		ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:11:13-36
 	android:name
-		ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:10:13-41
+		ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:10:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:12:13-15:29
+ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:12:13-15:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:13:17-69
+ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:13:17-69
 	android:name
-		ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:13:25-66
+		ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:13:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:14:17-77
+ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:14:17-77
 	android:name
-		ADDED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml:14:27-74
+		ADDED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml:14:27-74
 uses-sdk
-INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml
-INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml
+INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml
+INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\ef429fcda679bec0c86190c88198be13\transformed\material-1.12.0\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\ef429fcda679bec0c86190c88198be13\transformed\material-1.12.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\86a333ac14130578da5c599cd80a72e2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
@@ -187,9 +187,9 @@ MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\User
 MERGED from [androidx.print:print:1.0.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\e70ca82ca30d428a81ae24d596c5b9ad\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\e70ca82ca30d428a81ae24d596c5b9ad\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 	android:targetSdkVersion
-		INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\Sasha\Desktop\WordTrainerApp\app\src\main\AndroidManifest.xml
+		INJECTED from C:\WordTrainerApp\app\src\main\AndroidManifest.xml
 provider#androidx.startup.InitializationProvider
 ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\d3fc1a358b7e4020170246377cb560f0\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
 MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\Sasha\.gradle\caches\9.0-milestone-1\transforms\45555a0878306ac3ef8d8f050562c5fd\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:24:9-32:20

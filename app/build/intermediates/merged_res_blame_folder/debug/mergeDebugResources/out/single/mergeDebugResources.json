@@ -1,5 +1,13 @@
 [
     {
+        "merged": "C:\\Users\\Sasha\\.gradle\\daemon\\9.0-milestone-1\\com.example.wordtrainer.app-debug-31:\\raw_words.csv.flat",
+        "source": "C:\\Users\\Sasha\\.gradle\\daemon\\9.0-milestone-1\\com.example.wordtrainer.app-main-33:\\raw\\words.csv"
+    },
+    {
+        "merged": "C:\\Users\\Sasha\\.gradle\\daemon\\9.0-milestone-1\\com.example.wordtrainer.app-debug-31:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\Sasha\\.gradle\\daemon\\9.0-milestone-1\\com.example.wordtrainer.app-main-33:\\layout\\activity_main.xml"
+    },
+    {
         "merged": "com.example.wordtrainer.app-debug-31:/layout_activity_main.xml.flat",
         "source": "com.example.wordtrainer.app-main-33:/layout/activity_main.xml"
     }

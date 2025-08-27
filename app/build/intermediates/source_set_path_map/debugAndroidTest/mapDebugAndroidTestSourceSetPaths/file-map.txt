@@ -1,4 +1,4 @@
-com.example.wordtrainer.test.app-androidTest-0 C:\Users\Sasha\Desktop\WordTrainerApp\app\build\generated\res\resValues\androidTest\debug
-com.example.wordtrainer.test.app-mergeDebugAndroidTestResources-1 C:\Users\Sasha\Desktop\WordTrainerApp\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
-com.example.wordtrainer.test.app-mergeDebugAndroidTestResources-2 C:\Users\Sasha\Desktop\WordTrainerApp\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
-com.example.wordtrainer.test.app-debugAndroidTest-3 C:\Users\Sasha\Desktop\WordTrainerApp\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources
+com.example.wordtrainer.test.app-androidTest-0 C:\WordTrainerApp\app\build\generated\res\resValues\androidTest\debug
+com.example.wordtrainer.test.app-mergeDebugAndroidTestResources-1 C:\WordTrainerApp\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.example.wordtrainer.test.app-mergeDebugAndroidTestResources-2 C:\WordTrainerApp\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.example.wordtrainer.test.app-debugAndroidTest-3 C:\WordTrainerApp\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources

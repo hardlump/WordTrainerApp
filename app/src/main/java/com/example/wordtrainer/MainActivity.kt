@@ -1,4 +1,3 @@
-
 package com.example.wordtrainer
 
 import android.os.Bundle
@@ -6,6 +5,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONArray
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.nio.charset.Charset
 
 data class Word(val word: String, val translation: String)
@@ -17,9 +18,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var showTranslationBtn: Button
     private lateinit var prevBtn: Button
     private lateinit var nextBtn: Button
+    private lateinit var switchSourceBtn: Button
 
     private var words = listOf<Word>()
     private var currentIndex = 0
+    private var useJson = false // false — CSV, true — JSON
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,33 +33,75 @@ class MainActivity : AppCompatActivity() {
         showTranslationBtn = findViewById(R.id.showTranslationBtn)
         prevBtn = findViewById(R.id.prevBtn)
         nextBtn = findViewById(R.id.nextBtn)
+        switchSourceBtn = findViewById(R.id.switchSourceBtn)
 
-        // Load words from JSON file
-        words = loadWordsFromJson()
-
-        if (words.isNotEmpty()) {
-            currentIndex = (words.indices).random()
-            showWord()
-        }
+        updateSourceButtonText()
+        loadWordsFromCurrentSource()
 
         showTranslationBtn.setOnClickListener {
+            // Показываем весь перевод
             translationText.text = words[currentIndex].translation
         }
 
         nextBtn.setOnClickListener {
-            currentIndex = (currentIndex + 1) % words.size
+            currentIndex++
+            if (currentIndex >= words.size) {
+                words = words.shuffled()
+                currentIndex = 0
+            }
             showWord()
         }
 
         prevBtn.setOnClickListener {
-            currentIndex = if (currentIndex - 1 < 0) words.size - 1 else currentIndex - 1
+            currentIndex--
+            if (currentIndex < 0) {
+                words = words.shuffled()
+                currentIndex = words.size - 1
+            }
             showWord()
         }
+
+        switchSourceBtn.setOnClickListener {
+            useJson = !useJson
+            updateSourceButtonText()
+            loadWordsFromCurrentSource()
+        }
+    }
+
+    private fun updateSourceButtonText() {
+        switchSourceBtn.text = if (useJson) "Словарь" else "Мои слова"
+    }
+
+    private fun loadWordsFromCurrentSource() {
+        words = if (useJson) {
+            loadWordsFromJson()
+        } else {
+            loadWordsFromCsv()
+        }.shuffled()
+        currentIndex = 0
+        showWord()
     }
 
     private fun showWord() {
         wordText.text = words[currentIndex].word
         translationText.text = ""
+    }
+
+    private fun loadWordsFromCsv(): List<Word> {
+        val inputStream = resources.openRawResource(R.raw.words)
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        val list = mutableListOf<Word>()
+        reader.useLines { lines ->
+            lines.drop(1).forEach { // пропускаем заголовок
+                val parts = it.split(",")
+                if (parts.size >= 4) {
+                    val word = parts[0].trim('\'', ' ')
+                    val translation = parts.drop(3).joinToString(",").trim('\'', ' ', '"')
+                    list.add(Word(word, translation))
+                }
+            }
+        }
+        return list
     }
 
     private fun loadWordsFromJson(): List<Word> {
