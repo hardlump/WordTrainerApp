@@ -10,6 +10,7 @@ id bottomButtonsLayout
 id nextBtn
 id prevBtn
 id showTranslationBtn
+id speakBtn
 id switchSourceBtn
 id translationScroll
 id translationText

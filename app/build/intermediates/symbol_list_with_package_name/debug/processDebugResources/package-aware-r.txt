@@ -3508,6 +3508,7 @@ id snap
 id snapMargins
 id south
 id spacer
+id speakBtn
 id special_effects_controller_view_tag
 id spline
 id split_action_bar

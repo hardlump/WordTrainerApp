@@ -1,17 +1,21 @@
 package com.example.wordtrainer
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.net.URLEncoder
 import java.nio.charset.Charset
+import java.util.*
 
 data class Word(val word: String, val translation: String)
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var wordText: TextView
     private lateinit var translationText: TextView
@@ -19,10 +23,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var prevBtn: Button
     private lateinit var nextBtn: Button
     private lateinit var switchSourceBtn: Button
+    private lateinit var speakBtn: Button
 
     private var words = listOf<Word>()
     private var currentIndex = 0
     private var useJson = false // false — CSV, true — JSON
+
+    private lateinit var tts: TextToSpeech
+    private var ttsReady = false
+    private var useOfflineTts = true // true — Android TTS, false — Google Translate TTS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +43,14 @@ class MainActivity : AppCompatActivity() {
         prevBtn = findViewById(R.id.prevBtn)
         nextBtn = findViewById(R.id.nextBtn)
         switchSourceBtn = findViewById(R.id.switchSourceBtn)
+        speakBtn = findViewById(R.id.speakBtn)
+
+        tts = TextToSpeech(this, this)
 
         updateSourceButtonText()
         loadWordsFromCurrentSource()
 
         showTranslationBtn.setOnClickListener {
-            // Показываем весь перевод
             translationText.text = words[currentIndex].translation
         }
 
@@ -66,6 +77,20 @@ class MainActivity : AppCompatActivity() {
             updateSourceButtonText()
             loadWordsFromCurrentSource()
         }
+
+        speakBtn.setOnClickListener {
+            val word = words[currentIndex].word
+            if (useOfflineTts && ttsReady) {
+                speakOffline(word)
+            } else {
+                speakOnline(word)
+            }
+        }
+
+        wordText.setOnClickListener {
+            // Переключаем режим озвучивания между оффлайн и Google TTS
+            useOfflineTts = !useOfflineTts
+        }
     }
 
     private fun updateSourceButtonText() {
@@ -73,11 +98,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadWordsFromCurrentSource() {
-        words = if (useJson) {
-            loadWordsFromJson()
-        } else {
-            loadWordsFromCsv()
-        }.shuffled()
+        words = if (useJson) loadWordsFromJson() else loadWordsFromCsv()
+        words = words.shuffled()
         currentIndex = 0
         showWord()
     }
@@ -92,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         val reader = BufferedReader(InputStreamReader(inputStream))
         val list = mutableListOf<Word>()
         reader.useLines { lines ->
-            lines.drop(1).forEach { // пропускаем заголовок
+            lines.drop(1).forEach {
                 val parts = it.split(",")
                 if (parts.size >= 4) {
                     val word = parts[0].trim('\'', ' ')
@@ -114,5 +136,34 @@ class MainActivity : AppCompatActivity() {
             list.add(Word(obj.getString("word"), obj.getString("translation")))
         }
         return list
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            tts.language = Locale.ENGLISH
+            ttsReady = true
+        }
+    }
+
+    private fun speakOffline(word: String) {
+        tts.speak(word, TextToSpeech.QUEUE_FLUSH, null, null)
+    }
+
+    private fun speakOnline(word: String) {
+        val url = "https://translate.google.com/translate_tts?ie=UTF-8&q=${URLEncoder.encode(word, "UTF-8")}&tl=en&client=gtx"
+        try {
+            val mediaPlayer = MediaPlayer()
+            mediaPlayer.setDataSource(url)
+            mediaPlayer.prepare()
+            mediaPlayer.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onDestroy() {
+        tts.stop()
+        tts.shutdown()
+        super.onDestroy()
     }
 }

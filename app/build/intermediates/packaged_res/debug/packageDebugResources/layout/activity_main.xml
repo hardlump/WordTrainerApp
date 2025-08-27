@@ -50,6 +50,19 @@
         android:text="Показать перевод"
         app:backgroundTint="#2980B9"
         android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/speakBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Кнопка озвучивания слова -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/speakBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="🔊 Произнести"
+        app:backgroundTint="#3498DB"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@id/switchSourceBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
