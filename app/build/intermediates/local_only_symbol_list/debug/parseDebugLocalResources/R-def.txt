@@ -8,6 +8,7 @@ color teal_200
 color white
 drawable ic_launcher_background
 id bottomButtonsLayout
+id importJsonBtn
 id nextBtn
 id prevBtn
 id showTranslationBtn

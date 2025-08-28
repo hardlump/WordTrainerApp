@@ -7,6 +7,22 @@
     android:background="#FAF3E0"
     android:padding="20dp">
 
+    <!-- Кнопка импорта файла JSON -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/importJsonBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📂 Импорт"
+        app:backgroundTint="#7F8C8D"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_marginBottom="10dp"
+        app:cornerRadius="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <!-- Английское слово фиксировано сверху -->
     <TextView
         android:id="@+id/wordText"
@@ -17,9 +33,10 @@
         android:textStyle="bold"
         android:textColor="#2C3E50"
         android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/importJsonBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
 
     <!-- ScrollView для перевода -->
