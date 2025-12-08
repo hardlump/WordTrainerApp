@@ -9,6 +9,7 @@ color white
 drawable ic_launcher_background
 id bottomButtonsLayout
 id importJsonBtn
+id langSwitchBtn
 id nextBtn
 id prevBtn
 id showTranslationBtn
@@ -22,6 +23,7 @@ mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
 raw words
+raw words_ua
 string app_name
 style Theme.WordTrainerApp
 style Theme.WordTrainerApp2

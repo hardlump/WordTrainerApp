@@ -32,6 +32,10 @@
         "source": "C:\\Users\\Sasha\\.gradle\\daemon\\9.0-milestone-1\\com.example.wordtrainer.app-main-33:\\drawable\\gradient_background.xml"
     },
     {
+        "merged": "com.example.wordtrainer.app-debug-31:/raw_words_ua.csv.flat",
+        "source": "com.example.wordtrainer.app-main-33:/raw/words_ua.csv"
+    },
+    {
         "merged": "C:\\Users\\Sasha\\.gradle\\daemon\\9.0-milestone-1\\com.example.wordtrainer.app-debug-31:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
         "source": "C:\\Users\\Sasha\\.gradle\\daemon\\9.0-milestone-1\\com.example.wordtrainer.app-main-33:\\mipmap-xhdpi\\ic_launcher_round.webp"
     },
