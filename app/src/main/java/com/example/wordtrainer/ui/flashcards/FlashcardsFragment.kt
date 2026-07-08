@@ -1,10 +1,13 @@
 package com.example.wordtrainer.ui.flashcards
 
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.GestureDetector
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,6 +21,7 @@ import com.example.wordtrainer.R
 import com.example.wordtrainer.databinding.FragmentFlashcardsBinding
 import com.example.wordtrainer.domain.Direction
 import com.example.wordtrainer.ui.app
+import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -32,16 +36,28 @@ class FlashcardsFragment : Fragment() {
         }
     }
 
+    // Состояние жеста
+    private var downX = 0f
+    private var downY = 0f
+    private var dragging = false
+    private var animating = false
+    private var touchSlop = 0
+    private var lastWordKey: Long? = null
+
+    private val card: MaterialCardView get() = binding.card
+    private val density get() = resources.displayMetrics.density
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
         _binding = FragmentFlashcardsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        touchSlop = ViewConfiguration.get(requireContext()).scaledTouchSlop
         setupCardGestures()
 
-        binding.knowBtn.setOnClickListener { viewModel.answer(correct = true) }
-        binding.dontKnowBtn.setOnClickListener { viewModel.answer(correct = false) }
+        binding.knowBtn.setOnClickListener { flyOut(correct = true) }
+        binding.dontKnowBtn.setOnClickListener { flyOut(correct = false) }
         binding.speakBtn.setOnClickListener { viewModel.speak() }
         binding.favoriteBtn.setOnClickListener { viewModel.toggleFavorite() }
 
@@ -55,31 +71,110 @@ class FlashcardsFragment : Fragment() {
         }
     }
 
+    // ---- Жесты: карточка следует за пальцем и улетает при ответе ----------
+
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupCardGestures() {
-        val detector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
-            override fun onDown(e: MotionEvent) = true
-
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                viewModel.reveal()
-                return true
-            }
-
-            override fun onFling(e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float): Boolean {
-                val start = e1 ?: return false
-                val dx = e2.x - start.x
-                val dy = e2.y - start.y
-                if (abs(dx) > 120 && abs(dx) > abs(dy)) {
-                    viewModel.answer(correct = dx > 0) // вправо — знаю, влево — не знаю
-                    return true
+        card.setOnTouchListener { v, event ->
+            if (animating) return@setOnTouchListener true
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    downX = event.rawX
+                    downY = event.rawY
+                    dragging = false
+                    true
                 }
-                return false
+
+                MotionEvent.ACTION_MOVE -> {
+                    val dx = event.rawX - downX
+                    val dy = event.rawY - downY
+                    if (!dragging && abs(dx) > touchSlop && abs(dx) > abs(dy)) dragging = true
+                    if (dragging && card.width > 0) {
+                        card.translationX = dx
+                        card.rotation = dx / card.width * MAX_ROTATION
+                        updateSwipeHint(dx)
+                    }
+                    true
+                }
+
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    val dx = event.rawX - downX
+                    val dy = event.rawY - downY
+                    if (!dragging) {
+                        if (abs(dx) < touchSlop && abs(dy) < touchSlop) {
+                            v.performClick()
+                            viewModel.reveal()
+                        }
+                    } else if (abs(dx) > card.width * COMMIT_FRACTION) {
+                        flyOut(correct = dx > 0)
+                    } else {
+                        springBack()
+                    }
+                    dragging = false
+                    true
+                }
+
+                else -> false
             }
-        })
-        binding.card.isClickable = true
-        binding.card.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_UP) v.performClick()
-            detector.onTouchEvent(event)
         }
+    }
+
+    /** Подсветка рамки карточки при протягивании: зелёная вправо, красная влево. */
+    private fun updateSwipeHint(dx: Float) {
+        val frac = (abs(dx) / (card.width * COMMIT_FRACTION)).coerceIn(0f, 1f)
+        card.strokeWidth = (frac * MAX_STROKE_DP * density).toInt()
+        card.setStrokeColor(color(if (dx > 0) R.color.accent_correct else R.color.accent_wrong))
+    }
+
+    private fun clearSwipeHint() {
+        card.strokeWidth = 0
+    }
+
+    private fun springBack() {
+        card.animate().translationX(0f).rotation(0f)
+            .setDuration(if (animationsEnabled()) SPRING_MS else 0)
+            .withEndAction { clearSwipeHint() }
+            .start()
+    }
+
+    /** Улетание карточки в сторону ответа, затем — регистрация ответа. */
+    private fun flyOut(correct: Boolean) {
+        if (animating) return
+        if (viewModel.state.value.current == null) return
+        if (!animationsEnabled()) {
+            viewModel.answer(correct)
+            return
+        }
+        animating = true
+        val width = if (card.width > 0) card.width else resources.displayMetrics.widthPixels
+        card.setStrokeColor(color(if (correct) R.color.accent_correct else R.color.accent_wrong))
+        card.animate()
+            .translationX(if (correct) width * 1.5f else -width * 1.5f)
+            .rotation(if (correct) MAX_ROTATION else -MAX_ROTATION)
+            .alpha(0f)
+            .setDuration(FLY_OUT_MS)
+            .withEndAction {
+                clearSwipeHint()
+                animating = false
+                viewModel.answer(correct) // сменит состояние -> render анимирует появление
+            }
+            .start()
+    }
+
+    private fun animateIn() {
+        clearSwipeHint()
+        card.translationX = 0f
+        card.rotation = 0f
+        if (!animationsEnabled()) {
+            card.alpha = 1f
+            card.scaleX = 1f
+            card.scaleY = 1f
+            return
+        }
+        card.alpha = 0f
+        card.scaleX = 0.96f
+        card.scaleY = 0.96f
+        card.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(ANIMATE_IN_MS).start()
     }
 
     private fun render(state: FlashState) {
@@ -88,6 +183,7 @@ class FlashcardsFragment : Fragment() {
 
         val word = state.current
         if (word == null) {
+            lastWordKey = null
             binding.promptText.text = ""
             binding.answerText.text = ""
             binding.remainingText.text = ""
@@ -102,13 +198,39 @@ class FlashcardsFragment : Fragment() {
         binding.remainingText.text = getString(R.string.remaining, state.remaining)
 
         val starColor = if (word.isFavorite) R.color.accent_star else R.color.text_secondary
-        binding.favoriteBtn.setIconTint(
-            android.content.res.ColorStateList.valueOf(ContextCompat.getColor(requireContext(), starColor))
-        )
+        binding.favoriteBtn.iconTint = ColorStateList.valueOf(color(starColor))
+
+        // Новая карточка — проявляем; та же карточка (раскрытие/избранное) — оставляем как есть.
+        if (word.id != lastWordKey) {
+            lastWordKey = word.id
+            animateIn()
+        } else if (!animating && !state.loading) {
+            card.translationX = 0f
+            card.rotation = 0f
+            card.alpha = 1f
+        }
     }
+
+    private fun color(res: Int) = ContextCompat.getColor(requireContext(), res)
+
+    /** Учитываем системную настройку «уменьшить анимацию». */
+    private fun animationsEnabled(): Boolean =
+        Settings.Global.getFloat(
+            requireContext().contentResolver,
+            Settings.Global.ANIMATOR_DURATION_SCALE, 1f
+        ) > 0f
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private companion object {
+        const val MAX_ROTATION = 12f
+        const val COMMIT_FRACTION = 0.33f
+        const val MAX_STROKE_DP = 4f
+        const val FLY_OUT_MS = 180L
+        const val ANIMATE_IN_MS = 200L
+        const val SPRING_MS = 180L
     }
 }
