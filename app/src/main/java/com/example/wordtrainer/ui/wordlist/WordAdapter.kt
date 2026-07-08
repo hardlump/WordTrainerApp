@@ -12,6 +12,7 @@ import com.example.wordtrainer.databinding.ItemWordBinding
 import com.example.wordtrainer.ui.boxIndicator
 
 class WordAdapter(
+    private val onOpen: (WordEntity) -> Unit,
     private val onStar: (WordEntity) -> Unit,
     private val onLongPress: (WordEntity) -> Unit
 ) : ListAdapter<WordEntity, WordAdapter.VH>(DIFF) {
@@ -33,6 +34,7 @@ class WordAdapter(
             val starColor = if (item.isFavorite) R.color.accent_star else R.color.text_secondary
             starBtn.setColorFilter(ContextCompat.getColor(ctx, starColor))
             starBtn.setOnClickListener { onStar(item) }
+            root.setOnClickListener { onOpen(item) }
             root.setOnLongClickListener { onLongPress(item); true }
         }
     }

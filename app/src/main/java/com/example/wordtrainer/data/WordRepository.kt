@@ -173,6 +173,50 @@ class WordRepository(
         wordDao.deleteById(word.id)
     }
 
+    // ---- Детали / редактирование одного слова ----------------------------
+
+    suspend fun getWord(id: Long): WordEntity? = withContext(Dispatchers.IO) { wordDao.getById(id) }
+
+    /** Меняет текст слова/перевода. false — пустые поля или такой дубль уже есть. */
+    suspend fun updateWordText(word: WordEntity, newWord: String, newTranslation: String): Boolean =
+        withContext(Dispatchers.IO) {
+            val w = newWord.trim()
+            val t = newTranslation.trim()
+            if (w.isEmpty() || t.isEmpty()) return@withContext false
+            try {
+                wordDao.update(word.copy(word = w, translation = t))
+                true
+            } catch (e: Exception) {
+                e.printStackTrace() // нарушение уникального индекса (дубликат)
+                false
+            }
+        }
+
+    /** Полный сброс прогресса: слово снова «новое» в коробке 1. */
+    suspend fun resetProgress(word: WordEntity) = withContext(Dispatchers.IO) {
+        wordDao.update(
+            word.copy(
+                box = 1,
+                correctCount = 0,
+                wrongCount = 0,
+                lastReviewedAt = null,
+                nextDueAt = System.currentTimeMillis()
+            )
+        )
+    }
+
+    /** Пометить выученным: последняя коробка и длинный интервал до показа. */
+    suspend fun markLearned(word: WordEntity) = withContext(Dispatchers.IO) {
+        val now = System.currentTimeMillis()
+        wordDao.update(
+            word.copy(
+                box = Leitner.LEARNED_BOX,
+                lastReviewedAt = now,
+                nextDueAt = now + Leitner.intervalFor(Leitner.LEARNED_BOX)
+            )
+        )
+    }
+
     // ---- Импорт / экспорт ------------------------------------------------
 
     /** Импорт JSON-массива `[{"word":..,"translation":..}]` из выбранного файла. */

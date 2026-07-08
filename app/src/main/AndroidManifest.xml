@@ -27,6 +27,10 @@
         <activity
             android:name=".ui.settings.LanguagesActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.detail.WordDetailActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

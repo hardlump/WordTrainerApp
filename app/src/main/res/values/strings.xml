@@ -87,6 +87,29 @@
     <string name="lang_delete_confirm">Удалить язык «%1$s» и все его слова?</string>
     <string name="lang_delete_last">Нельзя удалить единственный язык</string>
 
+    <!-- Экран деталей слова -->
+    <string name="detail_title">Детали слова</string>
+    <string name="detail_progress">Прогресс</string>
+    <string name="detail_stats">Статистика</string>
+    <string name="detail_edit">Редактировать</string>
+    <string name="detail_reset">Сбросить прогресс</string>
+    <string name="detail_mark_learned">Пометить выученным</string>
+    <string name="detail_status_new">Статус: новое</string>
+    <string name="detail_status_learning">Статус: учится</string>
+    <string name="detail_status_learned">Статус: выучено</string>
+    <string name="detail_box">Коробка SRS: %1$s</string>
+    <string name="detail_next_due">Следующий показ: %1$s</string>
+    <string name="detail_next_due_now">Следующий показ: сейчас</string>
+    <string name="detail_last_reviewed">Последнее повторение: %1$s</string>
+    <string name="detail_never">—</string>
+    <string name="detail_answers">Верно: %1$d · Неверно: %2$d</string>
+    <string name="detail_accuracy">Точность: %1$d%%</string>
+    <string name="detail_created">Добавлено: %1$s</string>
+    <string name="word_updated">Слово изменено</string>
+    <string name="word_update_failed">Такое слово уже есть или поля пусты</string>
+    <string name="detail_fav_add">В избранное</string>
+    <string name="detail_fav_remove">Убрать из избранного</string>
+
     <!-- Экран настроек -->
     <string name="settings_title">Настройки</string>
     <string name="set_language">Язык</string>

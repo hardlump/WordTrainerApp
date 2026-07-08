@@ -1,5 +1,6 @@
 package com.example.wordtrainer.ui.wordlist
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.example.wordtrainer.data.local.WordEntity
 import com.example.wordtrainer.databinding.DialogAddWordBinding
 import com.example.wordtrainer.databinding.FragmentWordlistBinding
 import com.example.wordtrainer.ui.app
+import com.example.wordtrainer.ui.detail.WordDetailActivity
 import kotlinx.coroutines.launch
 
 class WordListFragment : Fragment() {
@@ -64,7 +66,11 @@ class WordListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = WordAdapter(onStar = viewModel::toggleFavorite, onLongPress = ::confirmDelete)
+        adapter = WordAdapter(
+            onOpen = ::openDetail,
+            onStar = viewModel::toggleFavorite,
+            onLongPress = ::confirmDelete
+        )
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
         binding.recycler.adapter = adapter
 
@@ -105,6 +111,13 @@ class WordListFragment : Fragment() {
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
+    }
+
+    private fun openDetail(word: WordEntity) {
+        startActivity(
+            Intent(requireContext(), WordDetailActivity::class.java)
+                .putExtra(WordDetailActivity.EXTRA_WORD_ID, word.id)
+        )
     }
 
     private fun confirmDelete(word: WordEntity) {
