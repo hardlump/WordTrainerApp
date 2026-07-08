@@ -1,9 +1,16 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.WordTrainerApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorPrimaryVariant">@color/brand_primary_dark</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/accent_teal</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:colorBackground">@color/screen_bg</item>
+        <item name="colorSurface">@color/card_bg</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/brand_primary_dark</item>
     </style>
+
+    <!-- Тема для тулбара с тёмным фоном и светлым текстом -->
+    <style name="Theme.WordTrainerApp.Toolbar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 </resources>

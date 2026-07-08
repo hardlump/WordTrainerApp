@@ -1,9 +1,29 @@
 
 <resources>
+    <!-- Базовая палитра -->
     <color name="purple_200">#BB86FC</color>
     <color name="purple_500">#6200EE</color>
     <color name="purple_700">#3700B3</color>
     <color name="teal_200">#03DAC5</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+
+    <!-- Бренд -->
+    <color name="brand_primary">#2C3E50</color>
+    <color name="brand_primary_dark">#1B2A38</color>
+
+    <!-- Семантические (светлая тема; тёмные варианты — в values-night) -->
+    <color name="screen_bg">#FAF3E0</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="text_primary">#2C3E50</color>
+    <color name="text_secondary">#7F8C8D</color>
+
+    <!-- Акценты -->
+    <color name="accent_correct">#27AE60</color>
+    <color name="accent_wrong">#C0392B</color>
+    <color name="accent_speak">#2980B9</color>
+    <color name="accent_star">#F1C40F</color>
+    <color name="accent_orange">#E67E22</color>
+    <color name="accent_purple">#8E44AD</color>
+    <color name="accent_teal">#16A085</color>
 </resources>

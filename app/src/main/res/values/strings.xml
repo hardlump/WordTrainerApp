@@ -1,4 +1,67 @@
 
 <resources>
     <string name="app_name">Word Trainer</string>
+
+    <!-- Нижняя навигация -->
+    <string name="tab_cards">Карточки</string>
+    <string name="tab_quiz">Квиз</string>
+    <string name="tab_words">Слова</string>
+    <string name="tab_stats">Статистика</string>
+
+    <!-- Меню -->
+    <string name="menu_language">Язык</string>
+    <string name="menu_direction">Сменить направление</string>
+    <string name="menu_tts">Режим озвучки</string>
+    <string name="menu_goal">Дневная цель</string>
+
+    <!-- Карточки -->
+    <string name="tap_to_reveal">Нажмите, чтобы показать перевод</string>
+    <string name="know">Знаю</string>
+    <string name="dont_know">Не знаю</string>
+    <string name="speak">Произнести</string>
+    <string name="remaining">Осталось в порции: %1$d</string>
+    <string name="empty_deck">В этой колоде пока нет слов. Добавьте их на вкладке «Слова» или импортируйте JSON.</string>
+    <string name="swipe_hint">Свайп вправо — «знаю», влево — «не знаю»</string>
+
+    <!-- Квиз -->
+    <string name="quiz_score">Счёт: %1$d / %2$d</string>
+    <string name="quiz_next">Дальше</string>
+    <string name="quiz_not_enough">Недостаточно слов для квиза (нужно минимум 2). Добавьте слова.</string>
+
+    <!-- Список слов -->
+    <string name="search_hint">Поиск слова или перевода</string>
+    <string name="favorites_only">Только избранное</string>
+    <string name="add_word">Добавить слово</string>
+    <string name="import_json">Импорт</string>
+    <string name="export_json">Экспорт</string>
+    <string name="field_word">Слово</string>
+    <string name="field_translation">Перевод</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="delete_confirm">Удалить «%1$s»?</string>
+    <string name="word_added">Слово добавлено</string>
+    <string name="word_exists">Такое слово уже есть или поля пусты</string>
+    <string name="imported_count">Импортировано слов: %1$d</string>
+    <string name="import_failed">Не удалось импортировать (проверьте формат JSON)</string>
+    <string name="empty_list">Список пуст</string>
+
+    <!-- Статистика -->
+    <string name="stat_total">Всего слов</string>
+    <string name="stat_learned">Выучено</string>
+    <string name="stat_due">К повторению</string>
+    <string name="stat_streak">Серия дней</string>
+    <string name="stat_streak_value">🔥 %1$d</string>
+    <string name="stat_today">Сегодня</string>
+    <string name="stat_goal_progress">%1$d / %2$d слов</string>
+    <string name="stat_accuracy">Точность сегодня: %1$d%%</string>
+
+    <!-- Диалоги -->
+    <string name="choose_language">Выберите язык</string>
+    <string name="choose_tts">Режим озвучки</string>
+    <string name="tts_offline">Оффлайн (Android TTS)</string>
+    <string name="tts_online">Онлайн (Google TTS)</string>
+    <string name="daily_goal_title">Слов в день</string>
+    <string name="direction_forward">Слово → Перевод</string>
+    <string name="direction_backward">Перевод → Слово</string>
 </resources>

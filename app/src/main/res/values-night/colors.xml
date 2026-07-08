@@ -1,0 +1,8 @@
+
+<resources>
+    <!-- Тёмные варианты семантических цветов -->
+    <color name="screen_bg">#121212</color>
+    <color name="card_bg">#1E1E1E</color>
+    <color name="text_primary">#ECEFF1</color>
+    <color name="text_secondary">#B0BEC5</color>
+</resources>
