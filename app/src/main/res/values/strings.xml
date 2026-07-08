@@ -26,7 +26,17 @@
     <!-- Квиз -->
     <string name="quiz_score">Счёт: %1$d / %2$d</string>
     <string name="quiz_next">Дальше</string>
-    <string name="quiz_not_enough">Недостаточно слов для квиза (нужно минимум 2). Добавьте слова.</string>
+    <string name="quiz_not_enough">Недостаточно слов для квиза (для режима «Выбор» нужно минимум 2). Добавьте слова или переключитесь на «Ввод».</string>
+    <string name="quiz_mode_choice">Выбор</string>
+    <string name="quiz_mode_input">Ввод</string>
+    <string name="quiz_input_hint">Ваш ответ</string>
+    <string name="quiz_check">Проверить</string>
+    <string name="quiz_correct">Верно!</string>
+    <string name="quiz_wrong">Неверно. Правильный ответ: %1$s</string>
+    <!-- Итог сессии -->
+    <string name="quiz_session_done">Итог сессии</string>
+    <string name="quiz_restart">Начать заново</string>
+    <string name="quiz_summary">Верно: %1$d из %2$d\nТочность: %3$d%%\nВыучено слов: %4$d</string>
 
     <!-- Список слов -->
     <string name="search_hint">Поиск слова или перевода</string>
@@ -55,6 +65,7 @@
     <string name="stat_today">Сегодня</string>
     <string name="stat_goal_progress">%1$d / %2$d слов</string>
     <string name="stat_accuracy">Точность сегодня: %1$d%%</string>
+    <string name="stat_activity">Активность за 14 дней</string>
 
     <!-- Диалоги -->
     <string name="choose_language">Выберите язык</string>
@@ -64,4 +75,11 @@
     <string name="daily_goal_title">Слов в день</string>
     <string name="direction_forward">Слово → Перевод</string>
     <string name="direction_backward">Перевод → Слово</string>
+
+    <!-- Экран настроек -->
+    <string name="settings_title">Настройки</string>
+    <string name="set_language">Язык</string>
+    <string name="set_direction">Направление тренировки</string>
+    <string name="set_tts">Озвучка</string>
+    <string name="set_goal">Слов в день</string>
 </resources>

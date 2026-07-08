@@ -3,6 +3,7 @@ package com.example.wordtrainer.data
 import android.content.Context
 import com.example.wordtrainer.domain.Direction
 import com.example.wordtrainer.domain.Language
+import com.example.wordtrainer.domain.QuizMode
 import com.example.wordtrainer.domain.TtsMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,6 +33,11 @@ class SettingsStore(context: Context) {
     private val _dailyGoal = MutableStateFlow(prefs.getInt(KEY_GOAL, DEFAULT_GOAL))
     val dailyGoal: StateFlow<Int> = _dailyGoal.asStateFlow()
 
+    private val _quizMode = MutableStateFlow(
+        QuizMode.valueOf(prefs.getString(KEY_QUIZ_MODE, QuizMode.CHOICE.name)!!)
+    )
+    val quizMode: StateFlow<QuizMode> = _quizMode.asStateFlow()
+
     fun setLanguage(value: Language) {
         prefs.edit().putString(KEY_LANG, value.code).apply()
         _language.value = value
@@ -53,6 +59,11 @@ class SettingsStore(context: Context) {
         _dailyGoal.value = v
     }
 
+    fun setQuizMode(value: QuizMode) {
+        prefs.edit().putString(KEY_QUIZ_MODE, value.name).apply()
+        _quizMode.value = value
+    }
+
     fun isSeeded(lang: Language): Boolean = prefs.getBoolean(KEY_SEEDED_PREFIX + lang.code, false)
 
     fun markSeeded(lang: Language) {
@@ -64,6 +75,7 @@ class SettingsStore(context: Context) {
         const val KEY_DIRECTION = "direction"
         const val KEY_TTS = "tts_mode"
         const val KEY_GOAL = "daily_goal"
+        const val KEY_QUIZ_MODE = "quiz_mode"
         const val KEY_SEEDED_PREFIX = "seeded_"
         const val DEFAULT_GOAL = 20
     }

@@ -47,6 +47,7 @@ class StatsFragment : Fragment() {
                     binding.goalText.text = getString(R.string.stat_goal_progress, s.reviewedToday, s.dailyGoal)
                     binding.goalProgress.progress = s.goalProgress
                     binding.accuracyText.text = getString(R.string.stat_accuracy, s.accuracyToday)
+                    binding.activityChart.setData(s.activity)
                 }
             }
         }

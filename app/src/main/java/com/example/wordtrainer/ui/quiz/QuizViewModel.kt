@@ -6,6 +6,8 @@ import com.example.wordtrainer.data.SettingsStore
 import com.example.wordtrainer.data.WordRepository
 import com.example.wordtrainer.data.local.WordEntity
 import com.example.wordtrainer.domain.Direction
+import com.example.wordtrainer.domain.Leitner
+import com.example.wordtrainer.domain.QuizMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,13 +20,21 @@ data class QuizState(
     val prompt: String = "",
     val options: List<QuizOption> = emptyList(),
     val direction: Direction = Direction.WORD_TO_TRANSLATION,
-    val answeredId: Long? = null,   // id выбранного варианта после ответа
-    val correctId: Long? = null,    // id правильного варианта
+    val mode: QuizMode = QuizMode.CHOICE,
+    val answeredId: Long? = null,     // CHOICE: выбранный вариант
+    val correctId: Long? = null,      // CHOICE: правильный вариант
+    val inputAnswered: Boolean = false, // INPUT: ответ отправлен
+    val inputCorrect: Boolean = false,  // INPUT: верно ли
+    val expectedAnswer: String = "",    // правильный ответ (для показа при ошибке)
     val correctCount: Int = 0,
     val totalCount: Int = 0,
+    val sessionLearned: Int = 0,        // сколько слов выучено за сессию
     val loading: Boolean = true,
-    val notEnough: Boolean = false  // слишком мало слов для квиза
-)
+    val notEnough: Boolean = false,     // мало слов для текущего режима
+    val finished: Boolean = false       // сессия завершена — показываем итог
+) {
+    val answered: Boolean get() = answeredId != null || inputAnswered
+}
 
 class QuizViewModel(
     private val repo: WordRepository,
@@ -34,37 +44,56 @@ class QuizViewModel(
     private val _state = MutableStateFlow(QuizState())
     val state: StateFlow<QuizState> = _state.asStateFlow()
 
+    /** Начать новую сессию с обнулением счёта. */
     fun start() {
-        _state.value = QuizState(loading = true)
+        _state.value = QuizState(loading = true, mode = settings.quizMode.value)
         nextQuestion(resetScore = true)
+    }
+
+    fun setMode(mode: QuizMode) {
+        if (mode == settings.quizMode.value) return
+        settings.setQuizMode(mode)
+        start()
     }
 
     fun nextQuestion(resetScore: Boolean = false) {
         viewModelScope.launch {
             val lang = settings.language.value
             repo.seedIfNeeded(lang, settings)
-            val batch = repo.nextTrainingBatch(lang, limit = 1)
-            val target = batch.firstOrNull()
+            val mode = settings.quizMode.value
+            val target = repo.nextTrainingBatch(lang, limit = 1).firstOrNull()
             if (target == null) {
-                _state.value = _state.value.copy(loading = false, notEnough = true, target = null)
-                return@launch
-            }
-            val distractors = repo.distractorsFor(target, count = 3)
-            if (distractors.size < 1) {
-                _state.value = _state.value.copy(loading = false, notEnough = true, target = null)
+                _state.value = _state.value.copy(loading = false, notEnough = true, target = null, finished = false)
                 return@launch
             }
             val direction = settings.direction.value
-            val options = (distractors + target).map { QuizOption(it, answerText(it, direction)) }.shuffled()
+            val expected = answerText(target, direction)
+
+            val options: List<QuizOption>
+            if (mode == QuizMode.CHOICE) {
+                val distractors = repo.distractorsFor(target, count = 3)
+                if (distractors.isEmpty()) {
+                    // Для выбора нужно ≥2 слов; ввод работает и с одним.
+                    _state.value = _state.value.copy(loading = false, notEnough = true, target = null)
+                    return@launch
+                }
+                options = (distractors + target).map { QuizOption(it, answerText(it, direction)) }.shuffled()
+            } else {
+                options = emptyList()
+            }
+
             val prev = _state.value
             _state.value = QuizState(
                 target = target,
                 prompt = promptText(target, direction),
                 options = options,
                 direction = direction,
+                mode = mode,
                 correctId = target.id,
+                expectedAnswer = expected,
                 correctCount = if (resetScore) 0 else prev.correctCount,
                 totalCount = if (resetScore) 0 else prev.totalCount,
+                sessionLearned = if (resetScore) 0 else prev.sessionLearned,
                 loading = false
             )
         }
@@ -73,14 +102,47 @@ class QuizViewModel(
     fun choose(option: QuizOption) {
         val s = _state.value
         val target = s.target ?: return
-        if (s.answeredId != null) return // уже ответили
-        val correct = option.word.id == target.id
+        if (s.answered) return
+        registerAnswer(target, option.word.id == target.id) { learned, correctCnt, total ->
+            s.copy(answeredId = option.word.id, correctCount = correctCnt, totalCount = total, sessionLearned = learned)
+                .let { finalizeIfNeeded(it) }
+        }
+    }
+
+    fun checkInput(text: String) {
+        val s = _state.value
+        val target = s.target ?: return
+        if (s.answered) return
+        val correct = isInputCorrect(text, s.expectedAnswer)
+        registerAnswer(target, correct) { learned, correctCnt, total ->
+            s.copy(inputAnswered = true, inputCorrect = correct, correctCount = correctCnt, totalCount = total, sessionLearned = learned)
+                .let { finalizeIfNeeded(it) }
+        }
+    }
+
+    /** Общая часть: пишем ответ в БД, считаем «выучено», отдаём новое состояние. */
+    private fun registerAnswer(
+        target: WordEntity,
+        correct: Boolean,
+        build: (learned: Int, correctCount: Int, total: Int) -> QuizState
+    ) {
+        val s = _state.value
+        val becameLearned = correct && target.box == Leitner.LEARNED_BOX - 1
+        val learned = s.sessionLearned + if (becameLearned) 1 else 0
+        _state.value = build(learned, s.correctCount + if (correct) 1 else 0, s.totalCount + 1)
         viewModelScope.launch { repo.submitAnswer(target, correct) }
-        _state.value = s.copy(
-            answeredId = option.word.id,
-            correctCount = s.correctCount + if (correct) 1 else 0,
-            totalCount = s.totalCount + 1
-        )
+    }
+
+    private fun finalizeIfNeeded(state: QuizState): QuizState =
+        if (state.totalCount >= SESSION_SIZE) state.copy(finished = true) else state
+
+    fun isInputCorrect(input: String, expected: String): Boolean {
+        val user = input.trim().lowercase()
+        if (user.isEmpty()) return false
+        // Перевод может содержать несколько вариантов — принимаем любой.
+        return expected.split(",", ";", "/")
+            .map { it.trim().lowercase() }
+            .any { it.isNotEmpty() && it == user }
     }
 
     private fun promptText(w: WordEntity, d: Direction): String =
@@ -88,4 +150,8 @@ class QuizViewModel(
 
     private fun answerText(w: WordEntity, d: Direction): String =
         if (d == Direction.WORD_TO_TRANSLATION) w.translation else w.word
+
+    companion object {
+        const val SESSION_SIZE = 10
+    }
 }

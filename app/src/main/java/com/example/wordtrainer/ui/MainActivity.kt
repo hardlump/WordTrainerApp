@@ -1,11 +1,10 @@
 package com.example.wordtrainer.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -13,10 +12,9 @@ import com.example.wordtrainer.R
 import com.example.wordtrainer.WordTrainerApp
 import com.example.wordtrainer.databinding.ActivityMainBinding
 import com.example.wordtrainer.domain.Direction
-import com.example.wordtrainer.domain.Language
-import com.example.wordtrainer.domain.TtsMode
 import com.example.wordtrainer.ui.flashcards.FlashcardsFragment
 import com.example.wordtrainer.ui.quiz.QuizFragment
+import com.example.wordtrainer.ui.settings.SettingsActivity
 import com.example.wordtrainer.ui.stats.StatsFragment
 import com.example.wordtrainer.ui.wordlist.WordListFragment
 import kotlinx.coroutines.launch
@@ -60,59 +58,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_direction -> { toggleDirection(); true }
-        R.id.action_language -> { chooseLanguage(); true }
-        R.id.action_tts -> { chooseTts(); true }
-        R.id.action_goal -> { chooseGoal(); true }
+        R.id.action_settings -> { startActivity(Intent(this, SettingsActivity::class.java)); true }
         else -> super.onOptionsItemSelected(item)
     }
 
+    /** Быстрое переключение направления прямо из тулбара во время тренировки. */
     private fun toggleDirection() {
         val next = settings.direction.value.toggled()
         settings.setDirection(next)
         val text = if (next == Direction.WORD_TO_TRANSLATION)
             getString(R.string.direction_forward) else getString(R.string.direction_backward)
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun chooseLanguage() {
-        val languages = Language.entries
-        val titles = languages.map { it.title }.toTypedArray()
-        val current = languages.indexOf(settings.language.value)
-        AlertDialog.Builder(this)
-            .setTitle(R.string.choose_language)
-            .setSingleChoiceItems(titles, current) { dialog, which ->
-                val lang = languages[which]
-                settings.setLanguage(lang)
-                lifecycleScope.launch { repository.seedIfNeeded(lang, settings) }
-                dialog.dismiss()
-            }
-            .show()
-    }
-
-    private fun chooseTts() {
-        val modes = arrayOf(getString(R.string.tts_offline), getString(R.string.tts_online))
-        val current = if (settings.ttsMode.value == TtsMode.OFFLINE) 0 else 1
-        AlertDialog.Builder(this)
-            .setTitle(R.string.choose_tts)
-            .setSingleChoiceItems(modes, current) { dialog, which ->
-                settings.setTtsMode(if (which == 0) TtsMode.OFFLINE else TtsMode.ONLINE)
-                dialog.dismiss()
-            }
-            .show()
-    }
-
-    private fun chooseGoal() {
-        val input = EditText(this).apply {
-            inputType = android.text.InputType.TYPE_CLASS_NUMBER
-            setText(settings.dailyGoal.value.toString())
-        }
-        AlertDialog.Builder(this)
-            .setTitle(R.string.daily_goal_title)
-            .setView(input)
-            .setPositiveButton(R.string.save) { _, _ ->
-                input.text.toString().toIntOrNull()?.let { settings.setDailyGoal(it) }
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
     }
 }

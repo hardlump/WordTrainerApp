@@ -7,16 +7,8 @@
         android:title="@string/menu_direction"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_language"
-        android:icon="@drawable/ic_language"
-        android:title="@string/menu_language"
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings_title"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_tts"
-        android:title="@string/menu_tts"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_goal"
-        android:title="@string/menu_goal"
-        app:showAsAction="never" />
 </menu>

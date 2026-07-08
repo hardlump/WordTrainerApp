@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/brand_primary"
+        android:theme="@style/Theme.WordTrainerApp.Toolbar"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/settings_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="8dp">
+
+            <LinearLayout
+                android:id="@+id/rowLanguage"
+                style="@style/SettingsRow">
+
+                <TextView style="@style/SettingsRowTitle" android:text="@string/set_language" />
+
+                <TextView android:id="@+id/languageValue" style="@style/SettingsRowValue" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowDirection"
+                style="@style/SettingsRow">
+
+                <TextView style="@style/SettingsRowTitle" android:text="@string/set_direction" />
+
+                <TextView android:id="@+id/directionValue" style="@style/SettingsRowValue" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowTts"
+                style="@style/SettingsRow">
+
+                <TextView style="@style/SettingsRowTitle" android:text="@string/set_tts" />
+
+                <TextView android:id="@+id/ttsValue" style="@style/SettingsRowValue" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowGoal"
+                style="@style/SettingsRow">
+
+                <TextView style="@style/SettingsRowTitle" android:text="@string/set_goal" />
+
+                <TextView android:id="@+id/goalValue" style="@style/SettingsRowValue" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

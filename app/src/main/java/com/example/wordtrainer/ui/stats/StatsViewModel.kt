@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wordtrainer.data.SettingsStore
 import com.example.wordtrainer.data.WordRepository
+import com.example.wordtrainer.domain.DayActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +20,8 @@ data class StatsState(
     val reviewedToday: Int = 0,
     val correctToday: Int = 0,
     val wrongToday: Int = 0,
-    val dailyGoal: Int = 20
+    val dailyGoal: Int = 20,
+    val activity: List<DayActivity> = emptyList()
 ) {
     val accuracyToday: Int
         get() = if (reviewedToday == 0) 0 else correctToday * 100 / reviewedToday
@@ -39,9 +41,10 @@ class StatsViewModel(
                 repo.observeTotal(lang),
                 repo.observeLearned(lang),
                 repo.observeDueCount(lang),
-                repo.observeStreak(),
+                combine(repo.observeStreak(), repo.observeActivity()) { streak, activity -> streak to activity },
                 combine(repo.observeToday(), settings.dailyGoal) { today, goal -> today to goal }
-            ) { total, learned, due, streak, todayGoal ->
+            ) { total, learned, due, streakActivity, todayGoal ->
+                val (streak, activity) = streakActivity
                 val (today, goal) = todayGoal
                 StatsState(
                     total = total,
@@ -51,7 +54,8 @@ class StatsViewModel(
                     reviewedToday = today.reviewed,
                     correctToday = today.correct,
                     wrongToday = today.wrong,
-                    dailyGoal = goal
+                    dailyGoal = goal,
+                    activity = activity
                 )
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), StatsState())

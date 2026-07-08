@@ -5,6 +5,7 @@ import android.net.Uri
 import com.example.wordtrainer.data.local.AppDatabase
 import com.example.wordtrainer.data.local.DailyStatEntity
 import com.example.wordtrainer.data.local.WordEntity
+import com.example.wordtrainer.domain.DayActivity
 import com.example.wordtrainer.domain.Language
 import com.example.wordtrainer.domain.Leitner
 import kotlinx.coroutines.Dispatchers
@@ -100,12 +101,18 @@ class WordRepository(
             wordDao.getRandomExcept(word.lang, word.id, count)
         }
 
-    /** Регистрирует ответ: обновляет SRS слова и дневную статистику. */
-    suspend fun submitAnswer(word: WordEntity, correct: Boolean) = withContext(Dispatchers.IO) {
-        wordDao.update(Leitner.onAnswer(word, correct))
+    /**
+     * Регистрирует ответ: обновляет SRS слова и дневную статистику.
+     * Возвращает обновлённое слово (по нему можно понять, стало ли оно
+     * выученным — коробка достигла [Leitner.LEARNED_BOX]).
+     */
+    suspend fun submitAnswer(word: WordEntity, correct: Boolean): WordEntity = withContext(Dispatchers.IO) {
+        val updated = Leitner.onAnswer(word, correct)
+        wordDao.update(updated)
         val day = today()
         statsDao.insertIgnore(DailyStatEntity(day))
         statsDao.increment(day, if (correct) 1 else 0, if (correct) 0 else 1)
+        updated
     }
 
     suspend fun toggleFavorite(word: WordEntity) = withContext(Dispatchers.IO) {
@@ -165,6 +172,21 @@ class WordRepository(
         }
         streak
     }
+
+    /** Активность за последние [days] дней (включая сегодня), пустые дни = 0. */
+    fun observeActivity(days: Int = 14): Flow<List<DayActivity>> =
+        statsDao.observeAllDays().map { rows ->
+            val reviewedByDate = rows.associate { it.date to it.reviewed }
+            val labelFormat = SimpleDateFormat("d", Locale.US)
+            val cal = Calendar.getInstance()
+            cal.add(Calendar.DAY_OF_YEAR, -(days - 1))
+            (0 until days).map {
+                val date = dayFormat.format(cal.time)
+                val activity = DayActivity(labelFormat.format(cal.time), reviewedByDate[date] ?: 0)
+                cal.add(Calendar.DAY_OF_YEAR, 1)
+                activity
+            }
+        }
 
     private fun today(): String = dayFormat.format(Calendar.getInstance().time)
 }

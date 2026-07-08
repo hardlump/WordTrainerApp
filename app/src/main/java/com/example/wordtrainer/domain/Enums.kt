@@ -24,3 +24,12 @@ enum class Direction {
 
 /** Режим озвучки. */
 enum class TtsMode { OFFLINE, ONLINE }
+
+/** Тип тренировки в квизе. */
+enum class QuizMode {
+    /** Выбор правильного перевода из вариантов. */
+    CHOICE,
+
+    /** Ввод ответа с клавиатуры. */
+    INPUT
+}
