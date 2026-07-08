@@ -1,0 +1,31 @@
+# Gradle
+.gradle/
+build/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Локальная конфигурация (свой SDK-путь на каждой машине)
+local.properties
+
+# Сборочные артефакты
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Логи и системный мусор
+*.log
+.DS_Store
+Thumbs.db
+
+# Keystore (не храните ключи подписи в гите)
+*.jks
+*.keystore

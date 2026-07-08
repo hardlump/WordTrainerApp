@@ -17,6 +17,8 @@
     <color name="card_bg">#FFFFFF</color>
     <color name="text_primary">#2C3E50</color>
     <color name="text_secondary">#7F8C8D</color>
+    <!-- Активная вкладка нижней навигации (в тёмной теме переопределяется) -->
+    <color name="nav_active">#2C3E50</color>
 
     <!-- Акценты -->
     <color name="accent_correct">#27AE60</color>
