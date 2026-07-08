@@ -75,7 +75,7 @@ class WordListFragment : Fragment() {
         binding.exportBtn.setOnClickListener {
             viewModel.exportJson { json ->
                 pendingExport = json
-                val name = "words_${app.settings.language.value.code.lowercase()}.json"
+                val name = "words_${app.settings.language.value.lowercase()}.json"
                 exportLauncher.launch(name)
             }
         }

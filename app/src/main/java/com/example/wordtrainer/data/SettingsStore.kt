@@ -1,8 +1,8 @@
 package com.example.wordtrainer.data
 
 import android.content.Context
+import com.example.wordtrainer.data.local.LanguageEntity
 import com.example.wordtrainer.domain.Direction
-import com.example.wordtrainer.domain.Language
 import com.example.wordtrainer.domain.QuizMode
 import com.example.wordtrainer.domain.TtsMode
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +17,9 @@ class SettingsStore(context: Context) {
 
     private val prefs = context.applicationContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-    private val _language = MutableStateFlow(Language.fromCode(prefs.getString(KEY_LANG, Language.EN.code)!!))
-    val language: StateFlow<Language> = _language.asStateFlow()
+    /** Текущий язык хранится как код (строка); список языков живёт в БД. */
+    private val _language = MutableStateFlow(prefs.getString(KEY_LANG, LanguageEntity.CODE_EN)!!)
+    val language: StateFlow<String> = _language.asStateFlow()
 
     private val _direction = MutableStateFlow(
         Direction.valueOf(prefs.getString(KEY_DIRECTION, Direction.WORD_TO_TRANSLATION.name)!!)
@@ -38,9 +39,9 @@ class SettingsStore(context: Context) {
     )
     val quizMode: StateFlow<QuizMode> = _quizMode.asStateFlow()
 
-    fun setLanguage(value: Language) {
-        prefs.edit().putString(KEY_LANG, value.code).apply()
-        _language.value = value
+    fun setLanguage(code: String) {
+        prefs.edit().putString(KEY_LANG, code).apply()
+        _language.value = code
     }
 
     fun setDirection(value: Direction) {
@@ -64,10 +65,10 @@ class SettingsStore(context: Context) {
         _quizMode.value = value
     }
 
-    fun isSeeded(lang: Language): Boolean = prefs.getBoolean(KEY_SEEDED_PREFIX + lang.code, false)
+    fun isSeeded(code: String): Boolean = prefs.getBoolean(KEY_SEEDED_PREFIX + code, false)
 
-    fun markSeeded(lang: Language) {
-        prefs.edit().putBoolean(KEY_SEEDED_PREFIX + lang.code, true).apply()
+    fun markSeeded(code: String) {
+        prefs.edit().putBoolean(KEY_SEEDED_PREFIX + code, true).apply()
     }
 
     private companion object {

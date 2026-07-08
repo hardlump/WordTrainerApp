@@ -4,7 +4,6 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
 import android.speech.tts.TextToSpeech
-import com.example.wordtrainer.domain.Language
 import com.example.wordtrainer.domain.TtsMode
 import java.net.URLEncoder
 import java.util.Locale
@@ -13,13 +12,15 @@ import java.util.Locale
  * Озвучка слов. По умолчанию — оффлайн Android TTS (надёжно, без сети).
  * Онлайн-режим (неофициальный эндпоинт Google) оставлен как фолбэк и снабжён
  * User-Agent, без которого сервис часто отдаёт 403.
+ *
+ * Язык задаётся BCP-47 тегом ([LanguageEntity.locale]), напр. «en», «uk», «de».
  */
 class Speaker(context: Context) : TextToSpeech.OnInitListener {
 
     private val appContext = context.applicationContext
     private var tts: TextToSpeech = TextToSpeech(appContext, this)
     private var ready = false
-    private var language: Language = Language.EN
+    private var localeTag: String = "en"
     private var mediaPlayer: MediaPlayer? = null
 
     override fun onInit(status: Int) {
@@ -29,19 +30,17 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
         }
     }
 
-    fun setLanguage(lang: Language) {
-        language = lang
-        if (ready) applyLocale()
-    }
-
     private fun applyLocale() {
-        tts.language = if (language == Language.EN) Locale.ENGLISH else Locale("uk", "UA")
+        runCatching { tts.language = Locale.forLanguageTag(localeTag) }
     }
 
-    fun speak(text: String, mode: TtsMode) {
+    fun speak(text: String, mode: TtsMode, localeTag: String) {
         if (text.isBlank()) return
-        val offlineWorks = mode == TtsMode.OFFLINE && ready
-        if (offlineWorks) speakOffline(text) else speakOnline(text)
+        if (localeTag.isNotBlank() && localeTag != this.localeTag) {
+            this.localeTag = localeTag
+            applyLocale()
+        }
+        if (mode == TtsMode.OFFLINE && ready) speakOffline(text) else speakOnline(text)
     }
 
     private fun speakOffline(text: String) {
@@ -49,7 +48,7 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
     }
 
     private fun speakOnline(text: String) {
-        val tl = if (language == Language.EN) "en" else "uk"
+        val tl = localeTag.substringBefore('-').ifBlank { "en" }
         val url = "https://translate.google.com/translate_tts?ie=UTF-8" +
             "&q=${URLEncoder.encode(text, "UTF-8")}&tl=$tl&client=gtx"
         try {

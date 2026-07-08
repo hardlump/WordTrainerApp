@@ -31,8 +31,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        // Прогреваем колоду текущего языка в фоне при старте.
-        lifecycleScope.launch { repository.seedIfNeeded(settings.language.value, settings) }
+        // Создаём языки по умолчанию и прогреваем колоду текущего языка в фоне.
+        lifecycleScope.launch {
+            repository.ensureDefaultLanguages()
+            repository.seedIfNeeded(settings.language.value, settings)
+        }
 
         binding.bottomNav.setOnItemSelectedListener { item ->
             val fragment: Fragment = when (item.itemId) {

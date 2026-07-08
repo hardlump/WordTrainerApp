@@ -1,15 +1,5 @@
 package com.example.wordtrainer.domain
 
-/** Язык изучаемой колоды. */
-enum class Language(val code: String, val title: String) {
-    EN("EN", "EN (English)"),
-    UA("UA", "UA (Українська)");
-
-    companion object {
-        fun fromCode(code: String): Language = entries.firstOrNull { it.code == code } ?: EN
-    }
-}
-
 /** Направление тренировки. */
 enum class Direction {
     /** Показываем слово, вспоминаем перевод. */

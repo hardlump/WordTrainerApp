@@ -22,6 +22,9 @@ interface WordDao {
     @Query("DELETE FROM words WHERE id = :id")
     suspend fun deleteById(id: Long)
 
+    @Query("DELETE FROM words WHERE lang = :lang")
+    suspend fun deleteByLang(lang: String)
+
     @Query("SELECT COUNT(*) FROM words WHERE lang = :lang")
     suspend fun countForLang(lang: String): Int
 

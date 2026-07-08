@@ -1,5 +1,6 @@
 package com.example.wordtrainer.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
@@ -12,8 +13,8 @@ import com.example.wordtrainer.R
 import com.example.wordtrainer.WordTrainerApp
 import com.example.wordtrainer.databinding.ActivitySettingsBinding
 import com.example.wordtrainer.domain.Direction
-import com.example.wordtrainer.domain.Language
 import com.example.wordtrainer.domain.TtsMode
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
@@ -28,14 +29,20 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
-        binding.rowLanguage.setOnClickListener { chooseLanguage() }
+        binding.rowLanguage.setOnClickListener {
+            startActivity(Intent(this, LanguagesActivity::class.java))
+        }
         binding.rowDirection.setOnClickListener { chooseDirection() }
         binding.rowTts.setOnClickListener { chooseTts() }
         binding.rowGoal.setOnClickListener { chooseGoal() }
 
         lifecycleScope.launch {
             this@SettingsActivity.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch { settings.language.collect { binding.languageValue.text = it.title } }
+                launch {
+                    combine(settings.language, repository.observeLanguages()) { code, langs ->
+                        langs.firstOrNull { it.code == code }?.name ?: code
+                    }.collect { binding.languageValue.text = it }
+                }
                 launch {
                     settings.direction.collect {
                         binding.directionValue.text = getString(
@@ -54,20 +61,6 @@ class SettingsActivity : AppCompatActivity() {
                 launch { settings.dailyGoal.collect { binding.goalValue.text = it.toString() } }
             }
         }
-    }
-
-    private fun chooseLanguage() {
-        val languages = Language.entries
-        val titles = languages.map { it.title }.toTypedArray()
-        AlertDialog.Builder(this)
-            .setTitle(R.string.set_language)
-            .setSingleChoiceItems(titles, languages.indexOf(settings.language.value)) { dialog, which ->
-                val lang = languages[which]
-                settings.setLanguage(lang)
-                lifecycleScope.launch { repository.seedIfNeeded(lang, settings) }
-                dialog.dismiss()
-            }
-            .show()
     }
 
     private fun chooseDirection() {

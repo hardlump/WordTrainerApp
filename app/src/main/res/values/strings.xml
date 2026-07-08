@@ -76,6 +76,17 @@
     <string name="direction_forward">Слово → Перевод</string>
     <string name="direction_backward">Перевод → Слово</string>
 
+    <!-- Экран языков -->
+    <string name="languages_title">Языки</string>
+    <string name="add_language">Добавить язык</string>
+    <string name="lang_name_hint">Название (напр. Deutsch)</string>
+    <string name="lang_locale_hint">Код озвучки (напр. de)</string>
+    <string name="lang_locale_help">BCP-47 код для озвучки: en, uk, de, fr, es…</string>
+    <string name="lang_added">Язык добавлен</string>
+    <string name="lang_add_failed">Заполните название и код языка</string>
+    <string name="lang_delete_confirm">Удалить язык «%1$s» и все его слова?</string>
+    <string name="lang_delete_last">Нельзя удалить единственный язык</string>
+
     <!-- Экран настроек -->
     <string name="settings_title">Настройки</string>
     <string name="set_language">Язык</string>

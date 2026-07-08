@@ -75,7 +75,9 @@ class FlashcardsViewModel(
 
     fun speak() {
         val word = _state.value.current ?: return
-        speaker.setLanguage(settings.language.value)
-        speaker.speak(word.word, settings.ttsMode.value)
+        viewModelScope.launch {
+            val locale = repo.getLanguage(settings.language.value)?.locale ?: "en"
+            speaker.speak(word.word, settings.ttsMode.value, locale)
+        }
     }
 }
