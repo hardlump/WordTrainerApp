@@ -47,12 +47,17 @@ interface WordDao {
     @Query("SELECT * FROM words WHERE lang = :lang AND isFavorite = 1 ORDER BY word COLLATE NOCASE ASC")
     fun observeFavorites(lang: String): Flow<List<WordEntity>>
 
-    /** Слова, готовые к повторению по SRS (срок подошёл), затем — самые «старые» по сроку. */
+    /**
+     * Слова, готовые к повторению по SRS (срок подошёл): сначала младшие коробки,
+     * затем самые «просроченные». RANDOM() разрешает равенства случайно, поэтому на
+     * свежей колоде (у всех box=1, nextDueAt=0) выбираются случайные слова со всего
+     * словаря, а не первые по порядку добавления.
+     */
     @Query(
         """
         SELECT * FROM words
         WHERE lang = :lang AND nextDueAt <= :now
-        ORDER BY box ASC, nextDueAt ASC
+        ORDER BY box ASC, nextDueAt ASC, RANDOM()
         LIMIT :limit
         """
     )
