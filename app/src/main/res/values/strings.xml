@@ -46,6 +46,9 @@
     <string name="export_json">Экспорт</string>
     <string name="field_word">Слово</string>
     <string name="field_translation">Перевод</string>
+    <string name="field_transcription">Транскрипция (необязательно)</string>
+    <string name="field_pos">Часть речи (необязательно)</string>
+    <string name="field_example">Пример (необязательно)</string>
     <string name="save">Сохранить</string>
     <string name="cancel">Отмена</string>
     <string name="delete">Удалить</string>
@@ -109,6 +112,15 @@
     <string name="word_update_failed">Такое слово уже есть или поля пусты</string>
     <string name="detail_fav_add">В избранное</string>
     <string name="detail_fav_remove">Убрать из избранного</string>
+
+    <!-- Экран словаря -->
+    <string name="dict_title">Словарь</string>
+    <string name="dict_search_hint">Поиск слова в словаре</string>
+    <string name="dict_empty">Ничего не найдено</string>
+    <string name="dict_add">Добавить в мои слова</string>
+    <string name="dict_added">Добавлено в колоду</string>
+    <string name="dict_exists">Слово уже есть в колоде</string>
+    <string name="menu_dictionary">Словарь</string>
 
     <!-- Экран настроек -->
     <string name="settings_title">Настройки</string>

@@ -6,14 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [WordEntity::class, DailyStatEntity::class, LanguageEntity::class],
-    version = 2,
+    entities = [WordEntity::class, DailyStatEntity::class, LanguageEntity::class, DictionaryEntry::class],
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
     abstract fun statsDao(): StatsDao
     abstract fun languageDao(): LanguageDao
+    abstract fun dictionaryDao(): DictionaryDao
 
     companion object {
         @Volatile

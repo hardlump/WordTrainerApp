@@ -18,6 +18,10 @@ data class WordEntity(
     val word: String,
     val translation: String,
     val lang: String,
+    // Необязательные поля «богатой» карточки (могут отсутствовать в старых данных).
+    val transcription: String? = null,
+    val partOfSpeech: String? = null,
+    val example: String? = null,
     val box: Int = 1,
     val correctCount: Int = 0,
     val wrongCount: Int = 0,

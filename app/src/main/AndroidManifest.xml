@@ -31,6 +31,10 @@
         <activity
             android:name=".ui.detail.WordDetailActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.dictionary.DictionaryActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

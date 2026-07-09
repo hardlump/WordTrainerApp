@@ -197,6 +197,20 @@ class FlashcardsFragment : Fragment() {
         binding.hintText.visibility = if (state.revealed) View.INVISIBLE else View.VISIBLE
         binding.remainingText.text = getString(R.string.remaining, state.remaining)
 
+        // Богатые поля. Транскрипция/часть речи относятся к слову, пример — к нему же.
+        val meta = listOfNotNull(word.transcription, word.partOfSpeech)
+            .filter { it.isNotBlank() }.joinToString(" · ")
+        val example = word.example?.takeIf { it.isNotBlank() }?.let { "«$it»" }
+        val promptSub = if (forward) meta else ""
+        val answerSub = if (forward) example.orEmpty()
+        else listOfNotNull(meta.ifEmpty { null }, example).joinToString("\n")
+
+        binding.promptSubText.text = promptSub
+        binding.promptSubText.visibility = if (promptSub.isBlank()) View.GONE else View.VISIBLE
+        binding.answerSubText.text = answerSub
+        binding.answerSubText.visibility =
+            if (state.revealed && answerSub.isNotBlank()) View.VISIBLE else View.GONE
+
         val starColor = if (word.isFavorite) R.color.accent_star else R.color.text_secondary
         binding.favoriteBtn.iconTint = ColorStateList.valueOf(color(starColor))
 

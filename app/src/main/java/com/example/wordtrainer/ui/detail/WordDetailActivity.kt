@@ -2,6 +2,7 @@ package com.example.wordtrainer.ui.detail
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,7 @@ import com.example.wordtrainer.R
 import com.example.wordtrainer.WordTrainerApp
 import com.example.wordtrainer.data.local.WordEntity
 import com.example.wordtrainer.databinding.ActivityWordDetailBinding
-import com.example.wordtrainer.databinding.DialogAddWordBinding
+import com.example.wordtrainer.databinding.DialogEditWordBinding
 import com.example.wordtrainer.domain.Leitner
 import com.example.wordtrainer.ui.boxIndicator
 import kotlinx.coroutines.launch
@@ -66,6 +67,17 @@ class WordDetailActivity : AppCompatActivity() {
         binding.wordText.text = word.word
         binding.translationText.text = word.translation
 
+        // Богатые поля: транскрипция · часть речи и пример — показываем, если есть.
+        val meta = listOfNotNull(word.transcription, word.partOfSpeech)
+            .filter { it.isNotBlank() }
+            .joinToString(" · ")
+        binding.metaText.text = meta
+        binding.metaText.visibility = if (meta.isBlank()) View.GONE else View.VISIBLE
+
+        val example = word.example
+        binding.exampleText.text = example?.let { "«$it»" }.orEmpty()
+        binding.exampleText.visibility = if (example.isNullOrBlank()) View.GONE else View.VISIBLE
+
         binding.favoriteBtn.text =
             getString(if (word.isFavorite) R.string.detail_fav_remove else R.string.detail_fav_add)
         val starColor = if (word.isFavorite) R.color.accent_star else R.color.text_secondary
@@ -100,16 +112,22 @@ class WordDetailActivity : AppCompatActivity() {
 
     private fun showEditDialog() {
         val word = viewModel.word.value ?: return
-        val dialogBinding = DialogAddWordBinding.inflate(layoutInflater)
+        val dialogBinding = DialogEditWordBinding.inflate(layoutInflater)
         dialogBinding.wordInput.setText(word.word)
         dialogBinding.translationInput.setText(word.translation)
+        dialogBinding.transcriptionInput.setText(word.transcription.orEmpty())
+        dialogBinding.posInput.setText(word.partOfSpeech.orEmpty())
+        dialogBinding.exampleInput.setText(word.example.orEmpty())
         AlertDialog.Builder(this)
             .setTitle(R.string.detail_edit)
             .setView(dialogBinding.root)
             .setPositiveButton(R.string.save) { _, _ ->
                 viewModel.edit(
                     dialogBinding.wordInput.text.toString(),
-                    dialogBinding.translationInput.text.toString()
+                    dialogBinding.translationInput.text.toString(),
+                    dialogBinding.transcriptionInput.text.toString(),
+                    dialogBinding.posInput.text.toString(),
+                    dialogBinding.exampleInput.text.toString()
                 ) { ok ->
                     Toast.makeText(
                         this,

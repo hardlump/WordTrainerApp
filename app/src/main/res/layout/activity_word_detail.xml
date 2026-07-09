@@ -49,12 +49,31 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/metaText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="15sp"
+                        android:visibility="gone" />
+
+                    <TextView
                         android:id="@+id/translationText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="8dp"
                         android:textColor="@color/accent_correct"
                         android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/exampleText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="15sp"
+                        android:textStyle="italic"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

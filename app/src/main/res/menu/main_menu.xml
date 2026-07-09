@@ -7,6 +7,11 @@
         android:title="@string/menu_direction"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_dictionary"
+        android:icon="@drawable/ic_book"
+        android:title="@string/menu_dictionary"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings_title"

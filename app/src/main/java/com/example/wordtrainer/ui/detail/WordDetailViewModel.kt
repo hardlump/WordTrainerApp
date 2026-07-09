@@ -46,10 +46,17 @@ class WordDetailViewModel(
         viewModelScope.launch { repo.markLearned(current); reload() }
     }
 
-    fun edit(newWord: String, newTranslation: String, onResult: (Boolean) -> Unit) {
+    fun edit(
+        newWord: String,
+        newTranslation: String,
+        transcription: String,
+        partOfSpeech: String,
+        example: String,
+        onResult: (Boolean) -> Unit
+    ) {
         val current = _word.value ?: return
         viewModelScope.launch {
-            val ok = repo.updateWordText(current, newWord, newTranslation)
+            val ok = repo.updateWordDetails(current, newWord, newTranslation, transcription, partOfSpeech, example)
             if (ok) reload()
             onResult(ok)
         }

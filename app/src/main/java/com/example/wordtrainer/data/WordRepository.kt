@@ -4,8 +4,10 @@ import android.content.Context
 import android.net.Uri
 import com.example.wordtrainer.data.local.AppDatabase
 import com.example.wordtrainer.data.local.DailyStatEntity
+import com.example.wordtrainer.data.local.DictionaryEntry
 import com.example.wordtrainer.data.local.LanguageEntity
 import com.example.wordtrainer.data.local.WordEntity
+import com.example.wordtrainer.data.seed.CsvParser
 import com.example.wordtrainer.domain.DayActivity
 import com.example.wordtrainer.domain.Leitner
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +35,7 @@ class WordRepository(
     private val wordDao = db.wordDao()
     private val statsDao = db.statsDao()
     private val languageDao = db.languageDao()
+    private val dictionaryDao = db.dictionaryDao()
     private val dayFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     // ---- Языки -----------------------------------------------------------
@@ -107,7 +110,17 @@ class WordRepository(
             if (obj.has("word") && obj.has("translation")) {
                 val w = obj.getString("word").trim()
                 val t = obj.getString("translation").trim()
-                if (w.isNotEmpty() && t.isNotEmpty()) list.add(WordEntity(word = w, translation = t, lang = code))
+                if (w.isNotEmpty() && t.isNotEmpty()) list.add(
+                    WordEntity(
+                        word = w,
+                        translation = t,
+                        lang = code,
+                        // Необязательные поля — читаем, только если есть (обратная совместимость).
+                        transcription = obj.optString("transcription").trim().ifEmpty { null },
+                        partOfSpeech = obj.optString("pos").trim().ifEmpty { null },
+                        example = obj.optString("example").trim().ifEmpty { null }
+                    )
+                )
             }
         }
         return list
@@ -177,20 +190,34 @@ class WordRepository(
 
     suspend fun getWord(id: Long): WordEntity? = withContext(Dispatchers.IO) { wordDao.getById(id) }
 
-    /** Меняет текст слова/перевода. false — пустые поля или такой дубль уже есть. */
-    suspend fun updateWordText(word: WordEntity, newWord: String, newTranslation: String): Boolean =
-        withContext(Dispatchers.IO) {
-            val w = newWord.trim()
-            val t = newTranslation.trim()
-            if (w.isEmpty() || t.isEmpty()) return@withContext false
-            try {
-                wordDao.update(word.copy(word = w, translation = t))
-                true
-            } catch (e: Exception) {
-                e.printStackTrace() // нарушение уникального индекса (дубликат)
-                false
-            }
+    /** Редактирование всех полей слова. false — пустые слово/перевод или такой дубль уже есть. */
+    suspend fun updateWordDetails(
+        word: WordEntity,
+        newWord: String,
+        newTranslation: String,
+        transcription: String,
+        partOfSpeech: String,
+        example: String
+    ): Boolean = withContext(Dispatchers.IO) {
+        val w = newWord.trim()
+        val t = newTranslation.trim()
+        if (w.isEmpty() || t.isEmpty()) return@withContext false
+        try {
+            wordDao.update(
+                word.copy(
+                    word = w,
+                    translation = t,
+                    transcription = transcription.trim().ifEmpty { null },
+                    partOfSpeech = partOfSpeech.trim().ifEmpty { null },
+                    example = example.trim().ifEmpty { null }
+                )
+            )
+            true
+        } catch (e: Exception) {
+            e.printStackTrace() // нарушение уникального индекса (дубликат)
+            false
         }
+    }
 
     /** Полный сброс прогресса: слово снова «новое» в коробке 1. */
     suspend fun resetProgress(word: WordEntity) = withContext(Dispatchers.IO) {
@@ -217,6 +244,63 @@ class WordRepository(
         )
     }
 
+    // ---- Большой словарь (справочник) ------------------------------------
+
+    /** Разово загружает словарь из assets/words.csv в БД (в фоне, ~56k строк). */
+    suspend fun seedDictionaryIfNeeded() = withContext(Dispatchers.IO) {
+        if (dictionaryDao.count() > 0) return@withContext
+        val entries = try {
+            context.assets.open("words.csv").bufferedReader(StandardCharsets.UTF_8).useLines { lines ->
+                lines.drop(1).mapNotNull { parseDictionaryLine(it) }.toList()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace(); emptyList()
+        }
+        entries.chunked(2000).forEach { dictionaryDao.insertAll(it) }
+    }
+
+    private fun parseDictionaryLine(line: String): DictionaryEntry? {
+        if (line.isBlank()) return null
+        val cols = CsvParser.parseLine(line)          // source,pos,transcription,translations
+        val word = cols.getOrNull(0)?.trim()?.trim('\'', ' ') ?: return null
+        val translation = cleanDictionaryTranslation(cols.getOrNull(3).orEmpty())
+        if (word.isEmpty() || translation.isEmpty()) return null
+        return DictionaryEntry(
+            word = word,
+            partOfSpeech = cols.getOrNull(1)?.trim()?.ifEmpty { null },
+            transcription = cols.getOrNull(2)?.trim()?.ifEmpty { null },
+            translation = translation
+        )
+    }
+
+    /** Чистит «сырой» перевод Мюллера от обёрток и служебных пометок. */
+    private fun cleanDictionaryTranslation(raw: String): String =
+        raw.trim()
+            .removePrefix("[").removeSuffix("]")
+            .trim().trim('\'', '"', ' ')
+            .replace("_", "")                     // курсив-пометки Мюллера (_сокр., _разг. …)
+            .replace(Regex("\\s+"), " ")
+            .trim().trim('\'', '"', ' ', ';', ',')
+
+    suspend fun searchDictionary(query: String): List<DictionaryEntry> = withContext(Dispatchers.IO) {
+        dictionaryDao.search(query.trim())
+    }
+
+    /** Добавляет слово из словаря в учебную колоду выбранного языка. */
+    suspend fun addFromDictionary(entry: DictionaryEntry, code: String): Boolean =
+        withContext(Dispatchers.IO) {
+            val id = wordDao.insert(
+                WordEntity(
+                    word = entry.word,
+                    translation = entry.translation,
+                    lang = code,
+                    transcription = entry.transcription,
+                    partOfSpeech = entry.partOfSpeech
+                )
+            )
+            id != -1L
+        }
+
     // ---- Импорт / экспорт ------------------------------------------------
 
     /** Импорт JSON-массива `[{"word":..,"translation":..}]` из выбранного файла. */
@@ -230,11 +314,15 @@ class WordRepository(
         ids.count { it != -1L } // сколько реально добавилось (без дублей)
     }
 
-    /** Экспорт колоды текущего языка в JSON-строку. */
+    /** Экспорт колоды текущего языка в JSON-строку. Необязательные поля — только если заполнены. */
     suspend fun exportJson(code: String): String = withContext(Dispatchers.IO) {
         val arr = JSONArray()
         wordDao.getNextUpcoming(code, Int.MAX_VALUE).sortedBy { it.word }.forEach { w ->
-            arr.put(JSONObject().put("word", w.word).put("translation", w.translation))
+            val obj = JSONObject().put("word", w.word).put("translation", w.translation)
+            w.transcription?.let { obj.put("transcription", it) }
+            w.partOfSpeech?.let { obj.put("pos", it) }
+            w.example?.let { obj.put("example", it) }
+            arr.put(obj)
         }
         arr.toString(2)
     }

@@ -48,53 +48,73 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="20dp">
 
-            <TextView
-                android:id="@+id/promptText"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/text_primary"
-                android:textSize="34sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/answerText"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_chainStyle="packed"
-                tools:text="word" />
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/answerText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/accent_correct"
-                android:textSize="26sp"
-                android:layout_marginTop="16dp"
-                android:visibility="invisible"
-                app:layout_constraintTop_toBottomOf="@id/promptText"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="перевод" />
+                <TextView
+                    android:id="@+id/promptText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/text_primary"
+                    android:textSize="34sp"
+                    android:textStyle="bold"
+                    tools:text="word" />
+
+                <TextView
+                    android:id="@+id/promptSubText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    tools:text="[wɜːd] · noun" />
+
+                <TextView
+                    android:id="@+id/answerText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/accent_correct"
+                    android:textSize="26sp"
+                    android:visibility="invisible"
+                    tools:text="перевод" />
+
+                <TextView
+                    android:id="@+id/answerSubText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    android:visibility="gone"
+                    tools:text="«example sentence»" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/hintText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
                 android:text="@string/tap_to_reveal"
                 android:textColor="@color/text_secondary"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textSize="13sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
