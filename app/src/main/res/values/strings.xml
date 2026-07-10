@@ -128,4 +128,17 @@
     <string name="set_direction">Направление тренировки</string>
     <string name="set_tts">Озвучка</string>
     <string name="set_goal">Слов в день</string>
+    <string name="set_reminders">Ежедневные напоминания</string>
+    <string name="set_reminder_time">Время напоминания</string>
+    <string name="reminder_on">Вкл</string>
+    <string name="reminder_off">Выкл</string>
+
+    <!-- Уведомления-напоминания -->
+    <string name="reminder_channel_name">Напоминания</string>
+    <string name="reminder_channel_desc">Ежедневное напоминание повторить слова</string>
+    <string name="reminder_title">Пора учить слова</string>
+    <string name="reminder_text_due">К повторению готово слов: %1$d</string>
+    <string name="reminder_text_general">Загляни и выучи пару новых слов</string>
+    <string name="reminder_text_empty">Добавь слова и начни учить</string>
+    <string name="reminder_permission_denied">Без разрешения на уведомления напоминания приходить не будут</string>
 </resources>

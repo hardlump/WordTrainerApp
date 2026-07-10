@@ -140,6 +140,16 @@ class WordRepository(
     fun observeDueCount(code: String): Flow<Int> =
         wordDao.observeDueCount(code, System.currentTimeMillis())
 
+    /** Разовый подсчёт слов, готовых к повторению (для фоновых напоминаний). */
+    suspend fun dueCount(code: String): Int = withContext(Dispatchers.IO) {
+        wordDao.countDueNow(code, System.currentTimeMillis())
+    }
+
+    /** Разовый подсчёт всех слов в колоде языка. */
+    suspend fun wordCount(code: String): Int = withContext(Dispatchers.IO) {
+        wordDao.countForLang(code)
+    }
+
     // ---- Тренировка ------------------------------------------------------
 
     /** Порция для карточек: сперва «подошедшие» по SRS, иначе ближайшие. */

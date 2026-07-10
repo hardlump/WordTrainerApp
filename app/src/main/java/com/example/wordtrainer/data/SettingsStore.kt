@@ -39,6 +39,16 @@ class SettingsStore(context: Context) {
     )
     val quizMode: StateFlow<QuizMode> = _quizMode.asStateFlow()
 
+    // ---- Ежедневные напоминания ----
+    private val _remindersEnabled = MutableStateFlow(prefs.getBoolean(KEY_REMINDERS, false))
+    val remindersEnabled: StateFlow<Boolean> = _remindersEnabled.asStateFlow()
+
+    private val _reminderHour = MutableStateFlow(prefs.getInt(KEY_REMINDER_HOUR, DEFAULT_REMINDER_HOUR))
+    val reminderHour: StateFlow<Int> = _reminderHour.asStateFlow()
+
+    private val _reminderMinute = MutableStateFlow(prefs.getInt(KEY_REMINDER_MINUTE, 0))
+    val reminderMinute: StateFlow<Int> = _reminderMinute.asStateFlow()
+
     fun setLanguage(code: String) {
         prefs.edit().putString(KEY_LANG, code).apply()
         _language.value = code
@@ -65,6 +75,17 @@ class SettingsStore(context: Context) {
         _quizMode.value = value
     }
 
+    fun setRemindersEnabled(value: Boolean) {
+        prefs.edit().putBoolean(KEY_REMINDERS, value).apply()
+        _remindersEnabled.value = value
+    }
+
+    fun setReminderTime(hour: Int, minute: Int) {
+        prefs.edit().putInt(KEY_REMINDER_HOUR, hour).putInt(KEY_REMINDER_MINUTE, minute).apply()
+        _reminderHour.value = hour
+        _reminderMinute.value = minute
+    }
+
     fun isSeeded(code: String): Boolean = prefs.getBoolean(KEY_SEEDED_PREFIX + code, false)
 
     fun markSeeded(code: String) {
@@ -78,6 +99,10 @@ class SettingsStore(context: Context) {
         const val KEY_GOAL = "daily_goal"
         const val KEY_QUIZ_MODE = "quiz_mode"
         const val KEY_SEEDED_PREFIX = "seeded_"
+        const val KEY_REMINDERS = "reminders_enabled"
+        const val KEY_REMINDER_HOUR = "reminder_hour"
+        const val KEY_REMINDER_MINUTE = "reminder_minute"
         const val DEFAULT_GOAL = 20
+        const val DEFAULT_REMINDER_HOUR = 20
     }
 }

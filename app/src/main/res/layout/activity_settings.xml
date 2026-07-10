@@ -62,6 +62,24 @@
                 <TextView android:id="@+id/goalValue" style="@style/SettingsRowValue" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/rowReminders"
+                style="@style/SettingsRow">
+
+                <TextView style="@style/SettingsRowTitle" android:text="@string/set_reminders" />
+
+                <TextView android:id="@+id/remindersValue" style="@style/SettingsRowValue" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowReminderTime"
+                style="@style/SettingsRow">
+
+                <TextView style="@style/SettingsRowTitle" android:text="@string/set_reminder_time" />
+
+                <TextView android:id="@+id/reminderTimeValue" style="@style/SettingsRowValue" />
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

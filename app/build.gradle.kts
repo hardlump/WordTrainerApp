@@ -56,6 +56,9 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
+    // WorkManager (фоновые ежедневные напоминания)
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
+
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
