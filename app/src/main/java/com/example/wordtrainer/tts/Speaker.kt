@@ -34,6 +34,14 @@ class Speaker(context: Context) : TextToSpeech.OnInitListener {
         runCatching { tts.language = Locale.forLanguageTag(localeTag) }
     }
 
+    /** Есть ли оффлайн-голос для языка (иначе стоит использовать онлайн). */
+    fun isOfflineAvailable(localeTag: String): Boolean {
+        if (!ready) return false
+        return runCatching {
+            tts.isLanguageAvailable(Locale.forLanguageTag(localeTag)) >= TextToSpeech.LANG_AVAILABLE
+        }.getOrDefault(false)
+    }
+
     fun speak(text: String, mode: TtsMode, localeTag: String) {
         if (text.isBlank()) return
         if (localeTag.isNotBlank() && localeTag != this.localeTag) {

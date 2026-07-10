@@ -9,6 +9,8 @@ import com.example.wordtrainer.data.local.WordEntity
 import com.example.wordtrainer.domain.Direction
 import com.example.wordtrainer.domain.Leitner
 import com.example.wordtrainer.domain.QuizMode
+import com.example.wordtrainer.domain.TtsMode
+import com.example.wordtrainer.tts.Speaker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,7 +42,8 @@ data class QuizState(
 class QuizViewModel(
     private val repo: WordRepository,
     private val settings: SettingsStore,
-    private val achievements: AchievementManager
+    private val achievements: AchievementManager,
+    private val speaker: Speaker
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(QuizState())
@@ -69,13 +72,15 @@ class QuizViewModel(
                 return@launch
             }
             val direction = settings.direction.value
-            val expected = answerText(target, direction)
+            val listening = mode == QuizMode.LISTENING
+            // На слух: звучит слово, ждём перевод (направление не влияет).
+            val expected = if (listening) target.translation else answerText(target, direction)
 
             val options: List<QuizOption>
             if (mode == QuizMode.CHOICE) {
                 val distractors = repo.distractorsFor(target, count = 3)
                 if (distractors.isEmpty()) {
-                    // Для выбора нужно ≥2 слов; ввод работает и с одним.
+                    // Для выбора нужно ≥2 слов; ввод/слух работают и с одним.
                     _state.value = _state.value.copy(loading = false, notEnough = true, target = null)
                     return@launch
                 }
@@ -87,7 +92,8 @@ class QuizViewModel(
             val prev = _state.value
             _state.value = QuizState(
                 target = target,
-                prompt = promptText(target, direction),
+                // В режиме «на слух» prompt хранит само слово (для кнопки «Показать слово»).
+                prompt = if (listening) target.word else promptText(target, direction),
                 options = options,
                 direction = direction,
                 mode = mode,
@@ -98,6 +104,20 @@ class QuizViewModel(
                 sessionLearned = if (resetScore) 0 else prev.sessionLearned,
                 loading = false
             )
+
+            if (listening) speakWord()
+        }
+    }
+
+    /** Проигрывает текущее слово (автоматически на новом вопросе и по кнопке «Повторить»). */
+    fun replay() = speakWord()
+
+    private fun speakWord() {
+        val word = _state.value.target ?: return
+        viewModelScope.launch {
+            val locale = repo.getLanguage(settings.language.value)?.locale ?: "en"
+            val useOffline = settings.ttsMode.value == TtsMode.OFFLINE && speaker.isOfflineAvailable(locale)
+            speaker.speak(word.word, if (useOffline) TtsMode.OFFLINE else TtsMode.ONLINE, locale)
         }
     }
 

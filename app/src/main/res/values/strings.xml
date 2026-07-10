@@ -29,6 +29,11 @@
     <string name="quiz_not_enough">Недостаточно слов для квиза (для режима «Выбор» нужно минимум 2). Добавьте слова или переключитесь на «Ввод».</string>
     <string name="quiz_mode_choice">Выбор</string>
     <string name="quiz_mode_input">Ввод</string>
+    <string name="quiz_mode_listen">На слух</string>
+    <string name="quiz_listen_replay">Повторить</string>
+    <string name="quiz_listen_hint">Прослушайте и введите перевод</string>
+    <string name="quiz_reveal_word">Показать слово</string>
+    <string name="quiz_no_audio">Озвучка недоступна для этого языка — слово показано</string>
     <string name="quiz_input_hint">Ваш ответ</string>
     <string name="quiz_check">Проверить</string>
     <string name="quiz_correct">Верно!</string>

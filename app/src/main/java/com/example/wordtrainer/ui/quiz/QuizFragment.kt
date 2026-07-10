@@ -28,11 +28,12 @@ class QuizFragment : Fragment() {
 
     private val viewModel: QuizViewModel by viewModels {
         viewModelFactory {
-            initializer { QuizViewModel(app.repository, app.settings, app.achievements) }
+            initializer { QuizViewModel(app.repository, app.settings, app.achievements, app.speaker) }
         }
     }
 
     private lateinit var optionButtons: List<MaterialButton>
+    private var lastTargetId: Long? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
@@ -50,7 +51,18 @@ class QuizFragment : Fragment() {
         }
         binding.modeToggle.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isChecked) return@addOnButtonCheckedListener
-            viewModel.setMode(if (checkedId == R.id.modeChoiceBtn) QuizMode.CHOICE else QuizMode.INPUT)
+            viewModel.setMode(
+                when (checkedId) {
+                    R.id.modeChoiceBtn -> QuizMode.CHOICE
+                    R.id.modeInputBtn -> QuizMode.INPUT
+                    else -> QuizMode.LISTENING
+                }
+            )
+        }
+        binding.replayBtn.setOnClickListener { viewModel.replay() }
+        binding.revealWordBtn.setOnClickListener {
+            binding.revealedWordText.text = viewModel.state.value.prompt
+            binding.revealedWordText.visibility = View.VISIBLE
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -69,7 +81,11 @@ class QuizFragment : Fragment() {
 
     private fun render(state: QuizState) {
         // Переключатель режима держим в синхроне с состоянием без лишних событий.
-        val desiredMode = if (state.mode == QuizMode.CHOICE) R.id.modeChoiceBtn else R.id.modeInputBtn
+        val desiredMode = when (state.mode) {
+            QuizMode.CHOICE -> R.id.modeChoiceBtn
+            QuizMode.INPUT -> R.id.modeInputBtn
+            QuizMode.LISTENING -> R.id.modeListenBtn
+        }
         if (binding.modeToggle.checkedButtonId != desiredMode) binding.modeToggle.check(desiredMode)
 
         binding.scoreText.text = getString(R.string.quiz_score, state.correctCount, state.totalCount)
@@ -92,12 +108,22 @@ class QuizFragment : Fragment() {
         }
 
         val hasQuestion = state.target != null && !state.notEnough && !state.finished
-        binding.promptText.visibility = if (hasQuestion) View.VISIBLE else View.INVISIBLE
-        binding.promptText.text = state.prompt
-
         val choiceMode = state.mode == QuizMode.CHOICE
+        val listening = state.mode == QuizMode.LISTENING
+
+        // В режиме «на слух» слово не показываем — только озвучка.
+        binding.promptText.visibility = if (hasQuestion && !listening) View.VISIBLE else View.INVISIBLE
+        binding.promptText.text = if (listening) "" else state.prompt
+        binding.listenContainer.visibility = if (hasQuestion && listening) View.VISIBLE else View.GONE
         binding.optionsContainer.visibility = if (hasQuestion && choiceMode) View.VISIBLE else View.GONE
+        // Ввод и слух отвечают через одно и то же поле.
         binding.inputContainer.visibility = if (hasQuestion && !choiceMode) View.VISIBLE else View.GONE
+
+        // Новый вопрос — прячем показанное слово (фолбэк для «на слух»).
+        if (state.target?.id != lastTargetId) {
+            lastTargetId = state.target?.id
+            binding.revealedWordText.visibility = View.GONE
+        }
 
         if (choiceMode) renderChoice(state) else renderInput(state)
 

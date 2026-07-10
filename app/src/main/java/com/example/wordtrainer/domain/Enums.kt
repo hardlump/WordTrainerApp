@@ -21,5 +21,8 @@ enum class QuizMode {
     CHOICE,
 
     /** Ввод ответа с клавиатуры. */
-    INPUT
+    INPUT,
+
+    /** На слух: озвучивается слово, вводится перевод. */
+    LISTENING
 }
