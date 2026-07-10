@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.wordtrainer.data.AchievementStore
 import com.example.wordtrainer.data.SettingsStore
 import com.example.wordtrainer.data.WordRepository
+import com.example.wordtrainer.domain.ActivityBuilder
 import com.example.wordtrainer.domain.DayActivity
 import com.example.wordtrainer.domain.LevelSystem
 import com.example.wordtrainer.domain.StreakCalculator
@@ -26,6 +27,7 @@ data class StatsState(
     val wrongToday: Int = 0,
     val dailyGoal: Int = 20,
     val activity: List<DayActivity> = emptyList(),
+    val heatmap: List<List<Int?>> = emptyList(),
     val level: Int = 1,
     val xpIntoLevel: Int = 0,
     val xpForNextLevel: Int = 100
@@ -43,18 +45,26 @@ class StatsViewModel(
     private val store: AchievementStore
 ) : ViewModel() {
 
+    private data class ActivityBundle(
+        val activity: List<DayActivity>,
+        val heatmap: List<List<Int?>>,
+        val streak: Int,
+        val totalReviews: Int
+    )
+
     val state: StateFlow<StatsState> =
         settings.language.flatMapLatest { lang ->
-            // Активность + стрик (с заморозками) + всего повторений.
-            val activityStreak = combine(
-                repo.observeActivity(), repo.observeAllDays(), store.frozenDates
-            ) { activity, days, frozen ->
+            // Из дневной статистики строим сразу: 14-дневный ряд, тепловую карту, стрик и всего повторений.
+            val activityBundle = combine(repo.observeAllDays(), store.frozenDates) { days, frozen ->
+                val byDate = days.associate { it.date to it.reviewed }
                 val active = days.filter { it.reviewed > 0 }.map { it.date }.toHashSet()
-                val streak = StreakCalculator.compute(active, frozen)
-                val totalReviews = days.sumOf { it.reviewed }
-                Triple(activity, streak, totalReviews)
+                ActivityBundle(
+                    activity = ActivityBuilder.recentDays(byDate, ACTIVITY_DAYS),
+                    heatmap = ActivityBuilder.heatmap(byDate, HEATMAP_WEEKS),
+                    streak = StreakCalculator.compute(active, frozen),
+                    totalReviews = days.sumOf { it.reviewed }
+                )
             }
-            // Сегодня + цель + запас заморозок.
             val todayGoalFreeze = combine(
                 repo.observeToday(), settings.dailyGoal, store.freezes
             ) { today, goal, freezes -> Triple(today, goal, freezes) }
@@ -63,27 +73,32 @@ class StatsViewModel(
                 repo.observeTotal(lang),
                 repo.observeLearned(lang),
                 repo.observeDueCount(lang),
-                activityStreak,
+                activityBundle,
                 todayGoalFreeze
-            ) { total, learned, due, act, tgf ->
-                val (activity, streak, totalReviews) = act
+            ) { total, learned, due, bundle, tgf ->
                 val (today, goal, freezes) = tgf
-                val level = LevelSystem.levelOf(LevelSystem.xp(totalReviews, learned))
+                val level = LevelSystem.levelOf(LevelSystem.xp(bundle.totalReviews, learned))
                 StatsState(
                     total = total,
                     learned = learned,
                     due = due,
-                    streak = streak,
+                    streak = bundle.streak,
                     freezes = freezes,
                     reviewedToday = today.reviewed,
                     correctToday = today.correct,
                     wrongToday = today.wrong,
                     dailyGoal = goal,
-                    activity = activity,
+                    activity = bundle.activity,
+                    heatmap = bundle.heatmap,
                     level = level.level,
                     xpIntoLevel = level.xpIntoLevel,
                     xpForNextLevel = level.xpForNextLevel
                 )
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), StatsState())
+
+    private companion object {
+        const val ACTIVITY_DAYS = 14
+        const val HEATMAP_WEEKS = 17
+    }
 }

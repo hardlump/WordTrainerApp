@@ -209,6 +209,37 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Тепловая карта активности -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="@color/card_bg"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stat_heatmap"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <com.example.wordtrainer.ui.widget.HeatmapView
+                    android:id="@+id/heatmap"
+                    android:layout_width="match_parent"
+                    android:layout_height="132dp"
+                    android:layout_marginTop="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/achievementsBtn"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"

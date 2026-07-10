@@ -58,6 +58,7 @@ class StatsFragment : Fragment() {
                     binding.goalProgress.progress = s.goalProgress
                     binding.accuracyText.text = getString(R.string.stat_accuracy, s.accuracyToday)
                     binding.activityChart.setData(s.activity)
+                    binding.heatmap.setData(s.heatmap)
                 }
             }
         }
