@@ -28,7 +28,7 @@ class QuizFragment : Fragment() {
 
     private val viewModel: QuizViewModel by viewModels {
         viewModelFactory {
-            initializer { QuizViewModel(app.repository, app.settings) }
+            initializer { QuizViewModel(app.repository, app.settings, app.achievements) }
         }
     }
 

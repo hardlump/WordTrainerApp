@@ -32,7 +32,7 @@ class FlashcardsFragment : Fragment() {
 
     private val viewModel: FlashcardsViewModel by viewModels {
         viewModelFactory {
-            initializer { FlashcardsViewModel(app.repository, app.settings, app.speaker) }
+            initializer { FlashcardsViewModel(app.repository, app.settings, app.speaker, app.achievements) }
         }
     }
 

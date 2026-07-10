@@ -76,6 +76,9 @@ interface WordDao {
     @Query("SELECT COUNT(*) FROM words WHERE lang = :lang AND box >= :learnedBox")
     fun observeLearned(lang: String, learnedBox: Int): Flow<Int>
 
+    @Query("SELECT COUNT(*) FROM words WHERE box >= :box")
+    suspend fun countLearnedAll(box: Int): Int
+
     @Query("SELECT COUNT(*) FROM words WHERE lang = :lang AND nextDueAt <= :now")
     fun observeDueCount(lang: String, now: Long): Flow<Int>
 

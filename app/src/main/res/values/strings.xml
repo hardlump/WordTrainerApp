@@ -141,4 +141,13 @@
     <string name="reminder_text_general">Загляни и выучи пару новых слов</string>
     <string name="reminder_text_empty">Добавь слова и начни учить</string>
     <string name="reminder_permission_denied">Без разрешения на уведомления напоминания приходить не будут</string>
+
+    <!-- Достижения / уровни -->
+    <string name="achievements_title">Достижения</string>
+    <string name="achievements_count">Открыто %1$d из %2$d</string>
+    <string name="achievement_status_unlocked">Получено</string>
+    <string name="achievement_unlocked">🏆 Достижение: %1$s</string>
+    <string name="stat_level">Уровень %1$d</string>
+    <string name="stat_xp">%1$d / %2$d XP</string>
+    <string name="stat_freeze">❄️ Заморозки стрика: %1$d</string>
 </resources>

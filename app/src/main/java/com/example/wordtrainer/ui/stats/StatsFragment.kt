@@ -1,5 +1,6 @@
 package com.example.wordtrainer.ui.stats
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.wordtrainer.R
 import com.example.wordtrainer.databinding.FragmentStatsBinding
+import com.example.wordtrainer.ui.achievements.AchievementsActivity
 import com.example.wordtrainer.ui.app
 import kotlinx.coroutines.launch
 
@@ -23,7 +25,7 @@ class StatsFragment : Fragment() {
 
     private val viewModel: StatsViewModel by viewModels {
         viewModelFactory {
-            initializer { StatsViewModel(app.repository, app.settings) }
+            initializer { StatsViewModel(app.repository, app.settings, app.achievementStore) }
         }
     }
 
@@ -36,14 +38,22 @@ class StatsFragment : Fragment() {
         binding.statTotal.cellLabel.text = getString(R.string.stat_total)
         binding.statLearned.cellLabel.text = getString(R.string.stat_learned)
         binding.statDue.cellLabel.text = getString(R.string.stat_due)
+        binding.achievementsBtn.setOnClickListener {
+            startActivity(Intent(requireContext(), AchievementsActivity::class.java))
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { s ->
                     binding.streakValue.text = getString(R.string.stat_streak_value, s.streak)
+                    binding.freezeText.text = getString(R.string.stat_freeze, s.freezes)
                     binding.statTotal.cellValue.text = s.total.toString()
                     binding.statLearned.cellValue.text = s.learned.toString()
                     binding.statDue.cellValue.text = s.due.toString()
+                    binding.levelValue.text = getString(R.string.stat_level, s.level)
+                    binding.xpProgress.max = s.xpForNextLevel
+                    binding.xpProgress.progress = s.xpIntoLevel
+                    binding.xpText.text = getString(R.string.stat_xp, s.xpIntoLevel, s.xpForNextLevel)
                     binding.goalText.text = getString(R.string.stat_goal_progress, s.reviewedToday, s.dailyGoal)
                     binding.goalProgress.progress = s.goalProgress
                     binding.accuracyText.text = getString(R.string.stat_accuracy, s.accuracyToday)

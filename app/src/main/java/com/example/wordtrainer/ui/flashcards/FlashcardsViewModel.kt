@@ -2,6 +2,7 @@ package com.example.wordtrainer.ui.flashcards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.wordtrainer.data.AchievementManager
 import com.example.wordtrainer.data.SettingsStore
 import com.example.wordtrainer.data.WordRepository
 import com.example.wordtrainer.data.local.WordEntity
@@ -26,7 +27,8 @@ data class FlashState(
 class FlashcardsViewModel(
     private val repo: WordRepository,
     private val settings: SettingsStore,
-    private val speaker: Speaker
+    private val speaker: Speaker,
+    private val achievements: AchievementManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(FlashState())
@@ -53,6 +55,7 @@ class FlashcardsViewModel(
         val word = s.current ?: return
         viewModelScope.launch {
             repo.submitAnswer(word, correct)
+            achievements.onAnswer(correct)
             val nextIndex = s.index + 1
             if (nextIndex >= s.words.size) {
                 load() // порция кончилась — берём следующую

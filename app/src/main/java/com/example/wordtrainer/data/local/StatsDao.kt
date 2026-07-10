@@ -33,4 +33,7 @@ interface StatsDao {
 
     @Query("SELECT * FROM daily_stats ORDER BY date DESC")
     fun observeAllDays(): Flow<List<DailyStatEntity>>
+
+    @Query("SELECT * FROM daily_stats ORDER BY date DESC")
+    suspend fun getAllDays(): List<DailyStatEntity>
 }

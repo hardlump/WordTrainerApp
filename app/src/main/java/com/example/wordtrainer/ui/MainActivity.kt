@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val settings by lazy { (application as WordTrainerApp).settings }
     private val repository by lazy { (application as WordTrainerApp).repository }
+    private val achievements by lazy { (application as WordTrainerApp).achievements }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repository.ensureDefaultLanguages()
             repository.seedIfNeeded(settings.language.value, settings)
+            // Заморозки за пропущенные дни + пересчёт достижений при заходе.
+            achievements.dailyMaintenance()
         }
 
         binding.bottomNav.setOnItemSelectedListener { item ->

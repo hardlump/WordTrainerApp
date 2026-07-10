@@ -79,6 +79,7 @@ class LanguagesActivity : AppCompatActivity() {
                         dialogBinding.nameInput.text.toString(),
                         dialogBinding.localeInput.text.toString()
                     )
+                    if (code != null) (application as WordTrainerApp).achievements.onLanguageAdded()
                     toast(getString(if (code != null) R.string.lang_added else R.string.lang_add_failed))
                 }
             }

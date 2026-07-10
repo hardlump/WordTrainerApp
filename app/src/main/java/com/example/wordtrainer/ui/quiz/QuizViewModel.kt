@@ -2,6 +2,7 @@ package com.example.wordtrainer.ui.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.wordtrainer.data.AchievementManager
 import com.example.wordtrainer.data.SettingsStore
 import com.example.wordtrainer.data.WordRepository
 import com.example.wordtrainer.data.local.WordEntity
@@ -38,7 +39,8 @@ data class QuizState(
 
 class QuizViewModel(
     private val repo: WordRepository,
-    private val settings: SettingsStore
+    private val settings: SettingsStore,
+    private val achievements: AchievementManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(QuizState())
@@ -130,7 +132,10 @@ class QuizViewModel(
         val becameLearned = correct && target.box == Leitner.LEARNED_BOX - 1
         val learned = s.sessionLearned + if (becameLearned) 1 else 0
         _state.value = build(learned, s.correctCount + if (correct) 1 else 0, s.totalCount + 1)
-        viewModelScope.launch { repo.submitAnswer(target, correct) }
+        viewModelScope.launch {
+            repo.submitAnswer(target, correct)
+            achievements.onAnswer(correct)
+        }
     }
 
     private fun finalizeIfNeeded(state: QuizState): QuizState =

@@ -37,6 +37,10 @@
         <activity
             android:name=".ui.dictionary.DictionaryActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.achievements.AchievementsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

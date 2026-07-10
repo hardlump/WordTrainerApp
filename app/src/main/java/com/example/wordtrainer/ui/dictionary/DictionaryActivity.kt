@@ -59,6 +59,7 @@ class DictionaryActivity : AppCompatActivity() {
 
     private fun addToDeck(entry: com.example.wordtrainer.data.local.DictionaryEntry) {
         viewModel.add(entry) { ok ->
+            if (ok) (application as WordTrainerApp).achievements.onDictionaryAdd()
             Toast.makeText(
                 this,
                 getString(if (ok) R.string.dict_added else R.string.dict_exists),

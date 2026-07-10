@@ -22,6 +22,7 @@ class ReminderWorker(
 
     override suspend fun doWork(): Result {
         val app = applicationContext as WordTrainerApp
+        app.achievements.dailyMaintenance()
         val code = app.settings.language.value
         val due = app.repository.dueCount(code)
         val total = app.repository.wordCount(code)

@@ -44,8 +44,10 @@ class WordListFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             uri ?: return@registerForActivityResult
             viewModel.importJson(uri) { added ->
-                val msg = if (added > 0) getString(R.string.imported_count, added)
-                else getString(R.string.import_failed)
+                val msg = if (added > 0) {
+                    app.achievements.onDeckImported()
+                    getString(R.string.imported_count, added)
+                } else getString(R.string.import_failed)
                 toast(msg)
             }
         }

@@ -150,6 +150,9 @@ class WordRepository(
         wordDao.countForLang(code)
     }
 
+    /** Все дни статистики (для стрика с заморозками и XP). */
+    fun observeAllDays(): Flow<List<DailyStatEntity>> = statsDao.observeAllDays()
+
     // ---- Тренировка ------------------------------------------------------
 
     /** Порция для карточек: сперва «подошедшие» по SRS, иначе ближайшие. */
