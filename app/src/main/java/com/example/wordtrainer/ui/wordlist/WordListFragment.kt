@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -78,6 +79,8 @@ class WordListFragment : Fragment() {
 
         binding.searchInput.doAfterTextChanged { viewModel.setQuery(it?.toString().orEmpty()) }
         binding.favoritesSwitch.setOnCheckedChangeListener { _, checked -> viewModel.setFavoritesOnly(checked) }
+        binding.filterBtn.setOnClickListener { showFilterMenu() }
+        binding.sortBtn.setOnClickListener { showSortMenu() }
         binding.addFab.setOnClickListener { showAddDialog() }
         binding.importBtn.setOnClickListener { importLauncher.launch(arrayOf("application/json")) }
         binding.exportBtn.setOnClickListener {
@@ -90,12 +93,60 @@ class WordListFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.words.collect { list ->
-                    adapter.submitList(list)
-                    binding.emptyText.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+                launch {
+                    viewModel.words.collect { list ->
+                        adapter.submitList(list)
+                        binding.emptyText.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+                    }
+                }
+                launch {
+                    viewModel.status.collect {
+                        binding.filterBtn.text = getString(R.string.filter_label, getString(statusLabelRes(it)))
+                    }
+                }
+                launch {
+                    viewModel.sort.collect {
+                        binding.sortBtn.text = getString(R.string.sort_label, getString(sortLabelRes(it)))
+                    }
                 }
             }
         }
+    }
+
+    private fun showFilterMenu() {
+        val popup = PopupMenu(requireContext(), binding.filterBtn)
+        WordStatus.entries.forEach { st ->
+            popup.menu.add(0, st.ordinal, st.ordinal, getString(statusLabelRes(st)))
+        }
+        popup.setOnMenuItemClickListener { item ->
+            viewModel.setStatus(WordStatus.entries[item.itemId]); true
+        }
+        popup.show()
+    }
+
+    private fun showSortMenu() {
+        val popup = PopupMenu(requireContext(), binding.sortBtn)
+        WordSort.entries.forEach { so ->
+            popup.menu.add(0, so.ordinal, so.ordinal, getString(sortLabelRes(so)))
+        }
+        popup.setOnMenuItemClickListener { item ->
+            viewModel.setSort(WordSort.entries[item.itemId]); true
+        }
+        popup.show()
+    }
+
+    private fun statusLabelRes(status: WordStatus): Int = when (status) {
+        WordStatus.ALL -> R.string.filter_all
+        WordStatus.NEW -> R.string.filter_new
+        WordStatus.LEARNING -> R.string.filter_learning
+        WordStatus.LEARNED -> R.string.filter_learned
+    }
+
+    private fun sortLabelRes(sort: WordSort): Int = when (sort) {
+        WordSort.ALPHABETICAL -> R.string.sort_alpha
+        WordSort.NEWEST -> R.string.sort_newest
+        WordSort.PROGRESS -> R.string.sort_progress
+        WordSort.HARDEST -> R.string.sort_hardest
     }
 
     private fun showAddDialog() {

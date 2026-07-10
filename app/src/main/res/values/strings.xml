@@ -46,6 +46,16 @@
     <!-- Список слов -->
     <string name="search_hint">Поиск слова или перевода</string>
     <string name="favorites_only">Только избранное</string>
+    <string name="filter_label">Фильтр: %1$s</string>
+    <string name="sort_label">Сорт.: %1$s</string>
+    <string name="filter_all">Все</string>
+    <string name="filter_new">Новые</string>
+    <string name="filter_learning">Учатся</string>
+    <string name="filter_learned">Выучены</string>
+    <string name="sort_alpha">Алфавит</string>
+    <string name="sort_newest">Сначала новые</string>
+    <string name="sort_progress">По прогрессу</string>
+    <string name="sort_hardest">Сложные</string>
     <string name="add_word">Добавить слово</string>
     <string name="import_json">Импорт</string>
     <string name="export_json">Экспорт</string>
