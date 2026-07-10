@@ -166,4 +166,46 @@
     <string name="stat_level">Уровень %1$d</string>
     <string name="stat_xp">%1$d / %2$d XP</string>
     <string name="stat_freeze">❄️ Заморозки стрика: %1$d</string>
+
+    <!-- Названия достижений -->
+    <string name="ach_streak3_title">Первые шаги</string>
+    <string name="ach_streak3_desc">Серия 3 дня подряд</string>
+    <string name="ach_streak7_title">Неделя в деле</string>
+    <string name="ach_streak7_desc">Серия 7 дней подряд</string>
+    <string name="ach_streak30_title">Месяц дисциплины</string>
+    <string name="ach_streak30_desc">Серия 30 дней подряд</string>
+    <string name="ach_streak100_title">Сотня!</string>
+    <string name="ach_streak100_desc">Серия 100 дней подряд</string>
+    <string name="ach_reviews100_title">Разминка</string>
+    <string name="ach_reviews100_desc">100 повторений всего</string>
+    <string name="ach_reviews1000_title">Марафонец</string>
+    <string name="ach_reviews1000_desc">1000 повторений всего</string>
+    <string name="ach_reviews5000_title">Ветеран</string>
+    <string name="ach_reviews5000_desc">5000 повторений всего</string>
+    <string name="ach_learned10_title">Первый десяток</string>
+    <string name="ach_learned10_desc">10 выученных слов</string>
+    <string name="ach_learned100_title">Полиглот в пути</string>
+    <string name="ach_learned100_desc">100 выученных слов</string>
+    <string name="ach_learned500_title">Словарный запас</string>
+    <string name="ach_learned500_desc">500 выученных слов</string>
+    <string name="ach_perfect_day_title">Без осечек</string>
+    <string name="ach_perfect_day_desc">День со 100% точностью (10+ ответов)</string>
+    <string name="ach_overachiever_title">Сверх плана</string>
+    <string name="ach_overachiever_desc">Двойная дневная цель за один день</string>
+    <string name="ach_night_owl_title">Сова</string>
+    <string name="ach_night_owl_desc">Занятие после полуночи</string>
+    <string name="ach_early_bird_title">Жаворонок</string>
+    <string name="ach_early_bird_desc">Занятие до 7 утра</string>
+    <string name="ach_polyglot_title">Свой язык</string>
+    <string name="ach_polyglot_desc">Добавлен новый язык</string>
+    <string name="ach_importer_title">Импортёр</string>
+    <string name="ach_importer_desc">Импортирована колода из файла</string>
+    <string name="ach_dict50_title">Книжный червь</string>
+    <string name="ach_dict50_desc">50 слов добавлено из словаря</string>
+
+    <!-- Язык интерфейса -->
+    <string name="set_ui_language">Язык интерфейса</string>
+    <string name="ui_lang_system">Системный</string>
+    <string name="ui_lang_ru">Русский</string>
+    <string name="ui_lang_en">English</string>
 </resources>

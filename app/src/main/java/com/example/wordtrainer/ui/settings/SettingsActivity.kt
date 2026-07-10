@@ -12,7 +12,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -56,6 +58,8 @@ class SettingsActivity : AppCompatActivity() {
         binding.rowGoal.setOnClickListener { chooseGoal() }
         binding.rowReminders.setOnClickListener { toggleReminders() }
         binding.rowReminderTime.setOnClickListener { pickReminderTime() }
+        binding.rowUiLanguage.setOnClickListener { chooseUiLanguage() }
+        binding.uiLanguageValue.text = getString(currentUiLanguageLabelRes())
 
         lifecycleScope.launch {
             this@SettingsActivity.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -131,6 +135,44 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun formatTime(hour: Int, minute: Int): String =
         String.format(Locale.US, "%02d:%02d", hour, minute)
+
+    // ---- Язык интерфейса ----
+
+    private fun chooseUiLanguage() {
+        val options = arrayOf(
+            getString(R.string.ui_lang_system),
+            getString(R.string.ui_lang_ru),
+            getString(R.string.ui_lang_en)
+        )
+        AlertDialog.Builder(this)
+            .setTitle(R.string.set_ui_language)
+            .setSingleChoiceItems(options, currentUiLanguageIndex()) { dialog, which ->
+                val locales = when (which) {
+                    1 -> LocaleListCompat.forLanguageTags("ru")
+                    2 -> LocaleListCompat.forLanguageTags("en")
+                    else -> LocaleListCompat.getEmptyLocaleList()
+                }
+                // Перезапускает активити с новым языком; сохраняется автоматически.
+                AppCompatDelegate.setApplicationLocales(locales)
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun currentUiLanguageIndex(): Int {
+        val tag = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+        return when {
+            tag.startsWith("ru") -> 1
+            tag.startsWith("en") -> 2
+            else -> 0
+        }
+    }
+
+    private fun currentUiLanguageLabelRes(): Int = when (currentUiLanguageIndex()) {
+        1 -> R.string.ui_lang_ru
+        2 -> R.string.ui_lang_en
+        else -> R.string.ui_lang_system
+    }
 
     private fun chooseDirection() {
         val options = arrayOf(getString(R.string.direction_forward), getString(R.string.direction_backward))

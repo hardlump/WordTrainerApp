@@ -80,6 +80,15 @@
                 <TextView android:id="@+id/reminderTimeValue" style="@style/SettingsRowValue" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/rowUiLanguage"
+                style="@style/SettingsRow">
+
+                <TextView style="@style/SettingsRowTitle" android:text="@string/set_ui_language" />
+
+                <TextView android:id="@+id/uiLanguageValue" style="@style/SettingsRowValue" />
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

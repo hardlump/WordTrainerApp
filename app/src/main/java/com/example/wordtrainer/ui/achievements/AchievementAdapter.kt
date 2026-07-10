@@ -25,8 +25,8 @@ class AchievementAdapter : ListAdapter<AchievementRow, AchievementAdapter.VH>(DI
         val row = getItem(position)
         val ctx = holder.binding.root.context
         with(holder.binding) {
-            titleText.text = row.achievement.title
-            descText.text = row.achievement.description
+            titleText.text = ctx.getString(row.achievement.titleRes)
+            descText.text = ctx.getString(row.achievement.descRes)
             statusText.text = if (row.unlocked) ctx.getString(R.string.achievement_status_unlocked) else ""
 
             val iconColor = if (row.unlocked) R.color.accent_star else R.color.text_secondary

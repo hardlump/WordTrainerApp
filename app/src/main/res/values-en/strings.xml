@@ -1,0 +1,210 @@
+<resources>
+    <string name="app_name">Word Trainer</string>
+
+    <!-- Bottom navigation -->
+    <string name="tab_cards">Cards</string>
+    <string name="tab_quiz">Quiz</string>
+    <string name="tab_words">Words</string>
+    <string name="tab_stats">Stats</string>
+
+    <!-- Menu -->
+    <string name="menu_language">Language</string>
+    <string name="menu_direction">Switch direction</string>
+    <string name="menu_tts">Pronunciation mode</string>
+    <string name="menu_goal">Daily goal</string>
+
+    <!-- Flashcards -->
+    <string name="tap_to_reveal">Tap to show the translation</string>
+    <string name="know">Know</string>
+    <string name="dont_know">Don\'t know</string>
+    <string name="speak">Speak</string>
+    <string name="remaining">Left in batch: %1$d</string>
+    <string name="empty_deck">This deck has no words yet. Add them on the “Words” tab or import a JSON file.</string>
+    <string name="swipe_hint">Swipe right — “know”, left — “don\'t know”</string>
+
+    <!-- Quiz -->
+    <string name="quiz_score">Score: %1$d / %2$d</string>
+    <string name="quiz_next">Next</string>
+    <string name="quiz_not_enough">Not enough words for the quiz (“Choice” needs at least 2). Add words or switch to “Input”.</string>
+    <string name="quiz_mode_choice">Choice</string>
+    <string name="quiz_mode_input">Input</string>
+    <string name="quiz_mode_listen">Listening</string>
+    <string name="quiz_listen_replay">Replay</string>
+    <string name="quiz_listen_hint">Listen and type the translation</string>
+    <string name="quiz_reveal_word">Show word</string>
+    <string name="quiz_no_audio">Audio isn\'t available for this language — the word is shown</string>
+    <string name="quiz_input_hint">Your answer</string>
+    <string name="quiz_check">Check</string>
+    <string name="quiz_correct">Correct!</string>
+    <string name="quiz_wrong">Wrong. Correct answer: %1$s</string>
+    <!-- Session summary -->
+    <string name="quiz_session_done">Session summary</string>
+    <string name="quiz_restart">Start over</string>
+    <string name="quiz_summary">Correct: %1$d of %2$d\nAccuracy: %3$d%%\nWords learned: %4$d</string>
+
+    <!-- Word list -->
+    <string name="search_hint">Search word or translation</string>
+    <string name="favorites_only">Favorites only</string>
+    <string name="filter_label">Filter: %1$s</string>
+    <string name="sort_label">Sort: %1$s</string>
+    <string name="filter_all">All</string>
+    <string name="filter_new">New</string>
+    <string name="filter_learning">Learning</string>
+    <string name="filter_learned">Learned</string>
+    <string name="sort_alpha">Alphabetical</string>
+    <string name="sort_newest">Newest first</string>
+    <string name="sort_progress">By progress</string>
+    <string name="sort_hardest">Hardest</string>
+    <string name="add_word">Add word</string>
+    <string name="import_json">Import</string>
+    <string name="export_json">Export</string>
+    <string name="field_word">Word</string>
+    <string name="field_translation">Translation</string>
+    <string name="field_transcription">Transcription (optional)</string>
+    <string name="field_pos">Part of speech (optional)</string>
+    <string name="field_example">Example (optional)</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="delete_confirm">Delete “%1$s”?</string>
+    <string name="word_added">Word added</string>
+    <string name="word_exists">This word already exists or fields are empty</string>
+    <string name="imported_count">Words imported: %1$d</string>
+    <string name="import_failed">Import failed (check the JSON format)</string>
+    <string name="empty_list">List is empty</string>
+
+    <!-- Statistics -->
+    <string name="stat_total">Total words</string>
+    <string name="stat_learned">Learned</string>
+    <string name="stat_due">Due</string>
+    <string name="stat_streak">Day streak</string>
+    <string name="stat_streak_value">🔥 %1$d</string>
+    <string name="stat_today">Today</string>
+    <string name="stat_goal_progress">%1$d / %2$d words</string>
+    <string name="stat_accuracy">Accuracy today: %1$d%%</string>
+    <string name="stat_activity">Activity over 14 days</string>
+    <string name="stat_heatmap">Activity heatmap</string>
+
+    <!-- Dialogs -->
+    <string name="choose_language">Choose language</string>
+    <string name="choose_tts">Pronunciation mode</string>
+    <string name="tts_offline">Offline (Android TTS)</string>
+    <string name="tts_online">Online (Google TTS)</string>
+    <string name="daily_goal_title">Words per day</string>
+    <string name="direction_forward">Word → Translation</string>
+    <string name="direction_backward">Translation → Word</string>
+
+    <!-- Languages screen -->
+    <string name="languages_title">Languages</string>
+    <string name="add_language">Add language</string>
+    <string name="lang_name_hint">Name (e.g. Deutsch)</string>
+    <string name="lang_locale_hint">Speech code (e.g. de)</string>
+    <string name="lang_locale_help">BCP-47 code for speech: en, uk, de, fr, es…</string>
+    <string name="lang_added">Language added</string>
+    <string name="lang_add_failed">Fill in the name and language code</string>
+    <string name="lang_delete_confirm">Delete language “%1$s” and all its words?</string>
+    <string name="lang_delete_last">Can\'t delete the only language</string>
+
+    <!-- Word details screen -->
+    <string name="detail_title">Word details</string>
+    <string name="detail_progress">Progress</string>
+    <string name="detail_stats">Statistics</string>
+    <string name="detail_edit">Edit</string>
+    <string name="detail_reset">Reset progress</string>
+    <string name="detail_mark_learned">Mark as learned</string>
+    <string name="detail_status_new">Status: new</string>
+    <string name="detail_status_learning">Status: learning</string>
+    <string name="detail_status_learned">Status: learned</string>
+    <string name="detail_box">SRS box: %1$s</string>
+    <string name="detail_next_due">Next review: %1$s</string>
+    <string name="detail_next_due_now">Next review: now</string>
+    <string name="detail_last_reviewed">Last reviewed: %1$s</string>
+    <string name="detail_never">—</string>
+    <string name="detail_answers">Correct: %1$d · Wrong: %2$d</string>
+    <string name="detail_accuracy">Accuracy: %1$d%%</string>
+    <string name="detail_created">Added: %1$s</string>
+    <string name="word_updated">Word updated</string>
+    <string name="word_update_failed">This word already exists or fields are empty</string>
+    <string name="detail_fav_add">Add to favorites</string>
+    <string name="detail_fav_remove">Remove from favorites</string>
+
+    <!-- Dictionary screen -->
+    <string name="dict_title">Dictionary</string>
+    <string name="dict_search_hint">Search a word in the dictionary</string>
+    <string name="dict_empty">Nothing found</string>
+    <string name="dict_add">Add to my words</string>
+    <string name="dict_added">Added to the deck</string>
+    <string name="dict_exists">Word is already in the deck</string>
+    <string name="menu_dictionary">Dictionary</string>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Settings</string>
+    <string name="set_language">Language</string>
+    <string name="set_direction">Training direction</string>
+    <string name="set_tts">Pronunciation</string>
+    <string name="set_goal">Words per day</string>
+    <string name="set_reminders">Daily reminders</string>
+    <string name="set_reminder_time">Reminder time</string>
+    <string name="reminder_on">On</string>
+    <string name="reminder_off">Off</string>
+
+    <!-- Reminder notifications -->
+    <string name="reminder_channel_name">Reminders</string>
+    <string name="reminder_channel_desc">Daily reminder to review words</string>
+    <string name="reminder_title">Time to learn words</string>
+    <string name="reminder_text_due">Words ready to review: %1$d</string>
+    <string name="reminder_text_general">Come in and learn a few new words</string>
+    <string name="reminder_text_empty">Add words and start learning</string>
+    <string name="reminder_permission_denied">Without notification permission reminders won\'t arrive</string>
+
+    <!-- Achievements / levels -->
+    <string name="achievements_title">Achievements</string>
+    <string name="achievements_count">Unlocked %1$d of %2$d</string>
+    <string name="achievement_status_unlocked">Unlocked</string>
+    <string name="achievement_unlocked">🏆 Achievement: %1$s</string>
+    <string name="stat_level">Level %1$d</string>
+    <string name="stat_xp">%1$d / %2$d XP</string>
+    <string name="stat_freeze">❄️ Streak freezes: %1$d</string>
+
+    <!-- Achievement names -->
+    <string name="ach_streak3_title">First steps</string>
+    <string name="ach_streak3_desc">3-day streak</string>
+    <string name="ach_streak7_title">Week in</string>
+    <string name="ach_streak7_desc">7-day streak</string>
+    <string name="ach_streak30_title">A month of discipline</string>
+    <string name="ach_streak30_desc">30-day streak</string>
+    <string name="ach_streak100_title">Century!</string>
+    <string name="ach_streak100_desc">100-day streak</string>
+    <string name="ach_reviews100_title">Warm-up</string>
+    <string name="ach_reviews100_desc">100 reviews total</string>
+    <string name="ach_reviews1000_title">Marathoner</string>
+    <string name="ach_reviews1000_desc">1000 reviews total</string>
+    <string name="ach_reviews5000_title">Veteran</string>
+    <string name="ach_reviews5000_desc">5000 reviews total</string>
+    <string name="ach_learned10_title">First ten</string>
+    <string name="ach_learned10_desc">10 words learned</string>
+    <string name="ach_learned100_title">Polyglot in the making</string>
+    <string name="ach_learned100_desc">100 words learned</string>
+    <string name="ach_learned500_title">Vocabulary</string>
+    <string name="ach_learned500_desc">500 words learned</string>
+    <string name="ach_perfect_day_title">Flawless</string>
+    <string name="ach_perfect_day_desc">A day at 100% accuracy (10+ answers)</string>
+    <string name="ach_overachiever_title">Overachiever</string>
+    <string name="ach_overachiever_desc">Double the daily goal in one day</string>
+    <string name="ach_night_owl_title">Night owl</string>
+    <string name="ach_night_owl_desc">A session after midnight</string>
+    <string name="ach_early_bird_title">Early bird</string>
+    <string name="ach_early_bird_desc">A session before 7 a.m.</string>
+    <string name="ach_polyglot_title">Your own language</string>
+    <string name="ach_polyglot_desc">A new language added</string>
+    <string name="ach_importer_title">Importer</string>
+    <string name="ach_importer_desc">A deck imported from a file</string>
+    <string name="ach_dict50_title">Bookworm</string>
+    <string name="ach_dict50_desc">50 words added from the dictionary</string>
+
+    <!-- Interface language -->
+    <string name="set_ui_language">Interface language</string>
+    <string name="ui_lang_system">System</string>
+    <string name="ui_lang_ru">Русский</string>
+    <string name="ui_lang_en">English</string>
+</resources>

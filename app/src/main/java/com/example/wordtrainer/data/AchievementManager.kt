@@ -135,7 +135,7 @@ class AchievementManager(
             mainHandler.post {
                 Toast.makeText(
                     context.applicationContext,
-                    context.getString(R.string.achievement_unlocked, achievement.title),
+                    context.getString(R.string.achievement_unlocked, context.getString(achievement.titleRes)),
                     Toast.LENGTH_LONG
                 ).show()
             }
