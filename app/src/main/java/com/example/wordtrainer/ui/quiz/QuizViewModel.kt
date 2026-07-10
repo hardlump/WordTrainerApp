@@ -6,6 +6,7 @@ import com.example.wordtrainer.data.AchievementManager
 import com.example.wordtrainer.data.SettingsStore
 import com.example.wordtrainer.data.WordRepository
 import com.example.wordtrainer.data.local.WordEntity
+import com.example.wordtrainer.domain.ClozeBuilder
 import com.example.wordtrainer.domain.Direction
 import com.example.wordtrainer.domain.Leitner
 import com.example.wordtrainer.domain.QuizMode
@@ -66,15 +67,24 @@ class QuizViewModel(
             val lang = settings.language.value
             repo.seedIfNeeded(lang, settings)
             val mode = settings.quizMode.value
-            val target = repo.nextTrainingBatch(lang, limit = 1).firstOrNull()
+            // Cloze берёт только слова с пригодным примером; остальные режимы — обычную порцию.
+            val target = if (mode == QuizMode.CLOZE)
+                repo.nextClozeBatch(lang).firstOrNull()
+            else
+                repo.nextTrainingBatch(lang, limit = 1).firstOrNull()
             if (target == null) {
                 _state.value = _state.value.copy(loading = false, notEnough = true, target = null, finished = false)
                 return@launch
             }
             val direction = settings.direction.value
             val listening = mode == QuizMode.LISTENING
-            // На слух: звучит слово, ждём перевод (направление не влияет).
-            val expected = if (listening) target.translation else answerText(target, direction)
+            val cloze = mode == QuizMode.CLOZE
+            // На слух: звучит слово, ждём перевод. Cloze: ждём само слово (пропуск в примере).
+            val expected = when {
+                listening -> target.translation
+                cloze -> target.word
+                else -> answerText(target, direction)
+            }
 
             val options: List<QuizOption>
             if (mode == QuizMode.CHOICE) {
@@ -92,8 +102,13 @@ class QuizViewModel(
             val prev = _state.value
             _state.value = QuizState(
                 target = target,
-                // В режиме «на слух» prompt хранит само слово (для кнопки «Показать слово»).
-                prompt = if (listening) target.word else promptText(target, direction),
+                // «На слух»: prompt хранит само слово (для кнопки «Показать слово»).
+                // Cloze: prompt — это предложение с пропуском.
+                prompt = when {
+                    listening -> target.word
+                    cloze -> ClozeBuilder.build(target.word, target.example) ?: target.word
+                    else -> promptText(target, direction)
+                },
                 options = options,
                 direction = direction,
                 mode = mode,

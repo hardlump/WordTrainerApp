@@ -29,6 +29,8 @@
     <string name="quiz_mode_choice">Choice</string>
     <string name="quiz_mode_input">Input</string>
     <string name="quiz_mode_listen">Listening</string>
+    <string name="quiz_mode_cloze">Cloze</string>
+    <string name="quiz_cloze_not_enough">This mode needs words with example sentences. Add words with an “Example” field or import an extended JSON.</string>
     <string name="quiz_listen_replay">Replay</string>
     <string name="quiz_listen_hint">Listen and type the translation</string>
     <string name="quiz_reveal_word">Show word</string>

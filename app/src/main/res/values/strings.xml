@@ -30,6 +30,8 @@
     <string name="quiz_mode_choice">Выбор</string>
     <string name="quiz_mode_input">Ввод</string>
     <string name="quiz_mode_listen">На слух</string>
+    <string name="quiz_mode_cloze">Пропуск</string>
+    <string name="quiz_cloze_not_enough">Для этого режима нужны слова с примерами. Добавьте слова с полем «Пример» или импортируйте расширенный JSON.</string>
     <string name="quiz_listen_replay">Повторить</string>
     <string name="quiz_listen_hint">Прослушайте и введите перевод</string>
     <string name="quiz_reveal_word">Показать слово</string>

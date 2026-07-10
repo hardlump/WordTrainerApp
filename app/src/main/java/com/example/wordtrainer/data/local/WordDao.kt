@@ -66,6 +66,27 @@ interface WordDao {
     @Query("SELECT * FROM words WHERE lang = :lang ORDER BY nextDueAt ASC LIMIT :limit")
     suspend fun getNextUpcoming(lang: String, limit: Int): List<WordEntity>
 
+    /** Как [getDue], но только слова с непустым примером — для Cloze-режима. */
+    @Query(
+        """
+        SELECT * FROM words
+        WHERE lang = :lang AND nextDueAt <= :now
+              AND example IS NOT NULL AND TRIM(example) != ''
+        ORDER BY box ASC, nextDueAt ASC, RANDOM()
+        LIMIT :limit
+        """
+    )
+    suspend fun getDueWithExample(lang: String, now: Long, limit: Int): List<WordEntity>
+
+    @Query(
+        """
+        SELECT * FROM words
+        WHERE lang = :lang AND example IS NOT NULL AND TRIM(example) != ''
+        ORDER BY nextDueAt ASC LIMIT :limit
+        """
+    )
+    suspend fun getUpcomingWithExample(lang: String, limit: Int): List<WordEntity>
+
     /** Случайные слова для генерации вариантов ответа в квизе. */
     @Query("SELECT * FROM words WHERE lang = :lang AND id != :excludeId ORDER BY RANDOM() LIMIT :limit")
     suspend fun getRandomExcept(lang: String, excludeId: Long, limit: Int): List<WordEntity>

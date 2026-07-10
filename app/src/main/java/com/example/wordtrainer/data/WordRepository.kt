@@ -8,6 +8,7 @@ import com.example.wordtrainer.data.local.DictionaryEntry
 import com.example.wordtrainer.data.local.LanguageEntity
 import com.example.wordtrainer.data.local.WordEntity
 import com.example.wordtrainer.data.seed.CsvParser
+import com.example.wordtrainer.domain.ClozeBuilder
 import com.example.wordtrainer.domain.DayActivity
 import com.example.wordtrainer.domain.Leitner
 import kotlinx.coroutines.Dispatchers
@@ -161,6 +162,17 @@ class WordRepository(
             val due = wordDao.getDue(code, System.currentTimeMillis(), limit)
             if (due.isNotEmpty()) due.shuffled()
             else wordDao.getNextUpcoming(code, limit).shuffled()
+        }
+
+    /**
+     * Порция для Cloze-режима: только слова с примером, пригодные для «пропуска»
+     * (пример реально содержит слово). Порядок — по SRS, как в [nextTrainingBatch].
+     */
+    suspend fun nextClozeBatch(code: String, limit: Int = 40): List<WordEntity> =
+        withContext(Dispatchers.IO) {
+            val due = wordDao.getDueWithExample(code, System.currentTimeMillis(), limit)
+            val pool = if (due.isNotEmpty()) due else wordDao.getUpcomingWithExample(code, limit)
+            pool.shuffled().filter { ClozeBuilder.build(it.word, it.example) != null }
         }
 
     /** Дистракторы (неправильные варианты) для квиза. */
