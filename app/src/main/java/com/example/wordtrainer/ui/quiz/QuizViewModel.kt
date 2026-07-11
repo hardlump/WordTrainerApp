@@ -6,7 +6,6 @@ import com.example.wordtrainer.data.AchievementManager
 import com.example.wordtrainer.data.SettingsStore
 import com.example.wordtrainer.data.WordRepository
 import com.example.wordtrainer.data.local.WordEntity
-import com.example.wordtrainer.domain.ClozeBuilder
 import com.example.wordtrainer.domain.Direction
 import com.example.wordtrainer.domain.Leitner
 import com.example.wordtrainer.domain.QuizMode
@@ -67,22 +66,16 @@ class QuizViewModel(
             val lang = settings.language.value
             repo.seedIfNeeded(lang, settings)
             val mode = settings.quizMode.value
-            // Cloze берёт только слова с пригодным примером; остальные режимы — обычную порцию.
-            val target = if (mode == QuizMode.CLOZE)
-                repo.nextClozeBatch(lang).firstOrNull()
-            else
-                repo.nextTrainingBatch(lang, limit = 1).firstOrNull()
+            val target = repo.nextTrainingBatch(lang, limit = 1).firstOrNull()
             if (target == null) {
                 _state.value = _state.value.copy(loading = false, notEnough = true, target = null, finished = false)
                 return@launch
             }
             val direction = settings.direction.value
             val listening = mode == QuizMode.LISTENING
-            val cloze = mode == QuizMode.CLOZE
-            // На слух: звучит слово, ждём перевод. Cloze: ждём само слово (пропуск в примере).
+            // На слух: звучит слово, ждём перевод.
             val expected = when {
                 listening -> target.translation
-                cloze -> target.word
                 else -> answerText(target, direction)
             }
 
@@ -106,7 +99,6 @@ class QuizViewModel(
                 // Cloze: prompt — это предложение с пропуском.
                 prompt = when {
                     listening -> target.word
-                    cloze -> ClozeBuilder.build(target.word, target.example) ?: target.word
                     else -> promptText(target, direction)
                 },
                 options = options,

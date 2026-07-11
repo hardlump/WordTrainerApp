@@ -57,14 +57,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/quiz_mode_listen"
                 android:textSize="13sp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/modeClozeBtn"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/quiz_mode_cloze"
-                android:textSize="13sp" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
     </HorizontalScrollView>
 

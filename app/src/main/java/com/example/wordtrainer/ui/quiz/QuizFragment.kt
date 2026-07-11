@@ -1,7 +1,6 @@
 package com.example.wordtrainer.ui.quiz
 
 import android.content.res.ColorStateList
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,8 +55,7 @@ class QuizFragment : Fragment() {
                 when (checkedId) {
                     R.id.modeChoiceBtn -> QuizMode.CHOICE
                     R.id.modeInputBtn -> QuizMode.INPUT
-                    R.id.modeListenBtn -> QuizMode.LISTENING
-                    else -> QuizMode.CLOZE
+                    else -> QuizMode.LISTENING
                 }
             )
         }
@@ -87,19 +85,14 @@ class QuizFragment : Fragment() {
             QuizMode.CHOICE -> R.id.modeChoiceBtn
             QuizMode.INPUT -> R.id.modeInputBtn
             QuizMode.LISTENING -> R.id.modeListenBtn
-            QuizMode.CLOZE -> R.id.modeClozeBtn
         }
         if (binding.modeToggle.checkedButtonId != desiredMode) binding.modeToggle.check(desiredMode)
 
         binding.scoreText.text = getString(R.string.quiz_score, state.correctCount, state.totalCount)
 
-        // Экран «мало слов» (для Cloze — отдельный текст про примеры).
+        // Экран «мало слов».
         binding.emptyText.visibility = if (state.notEnough) View.VISIBLE else View.GONE
-        if (state.notEnough) {
-            binding.emptyText.setText(
-                if (state.mode == QuizMode.CLOZE) R.string.quiz_cloze_not_enough else R.string.quiz_not_enough
-            )
-        }
+        if (state.notEnough) binding.emptyText.setText(R.string.quiz_not_enough)
 
         // Итог сессии.
         if (state.finished) {
@@ -118,14 +111,10 @@ class QuizFragment : Fragment() {
         val hasQuestion = state.target != null && !state.notEnough && !state.finished
         val choiceMode = state.mode == QuizMode.CHOICE
         val listening = state.mode == QuizMode.LISTENING
-        val cloze = state.mode == QuizMode.CLOZE
 
         // В режиме «на слух» слово не показываем — только озвучка.
         binding.promptText.visibility = if (hasQuestion && !listening) View.VISIBLE else View.INVISIBLE
         binding.promptText.text = if (listening) "" else state.prompt
-        // Cloze — это целое предложение: мельче и без жирного, чтобы поместилось.
-        binding.promptText.textSize = if (cloze) 20f else 32f
-        binding.promptText.setTypeface(null, if (cloze) Typeface.NORMAL else Typeface.BOLD)
         binding.listenContainer.visibility = if (hasQuestion && listening) View.VISIBLE else View.GONE
         binding.optionsContainer.visibility = if (hasQuestion && choiceMode) View.VISIBLE else View.GONE
         // Ввод и слух отвечают через одно и то же поле.

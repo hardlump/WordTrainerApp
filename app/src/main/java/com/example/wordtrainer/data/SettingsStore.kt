@@ -35,7 +35,9 @@ class SettingsStore(context: Context) {
     val dailyGoal: StateFlow<Int> = _dailyGoal.asStateFlow()
 
     private val _quizMode = MutableStateFlow(
-        QuizMode.valueOf(prefs.getString(KEY_QUIZ_MODE, QuizMode.CHOICE.name)!!)
+        // Режим мог быть удалён из приложения (напр. CLOZE) — тогда откатываемся на CHOICE.
+        runCatching { QuizMode.valueOf(prefs.getString(KEY_QUIZ_MODE, QuizMode.CHOICE.name)!!) }
+            .getOrDefault(QuizMode.CHOICE)
     )
     val quizMode: StateFlow<QuizMode> = _quizMode.asStateFlow()
 
