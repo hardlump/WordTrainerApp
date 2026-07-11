@@ -12,6 +12,7 @@ import com.example.wordtrainer.R
 import com.example.wordtrainer.WordTrainerApp
 import com.example.wordtrainer.databinding.ActivityMainBinding
 import com.example.wordtrainer.domain.Direction
+import com.example.wordtrainer.ui.coach.CoachActivity
 import com.example.wordtrainer.ui.dictionary.DictionaryActivity
 import com.example.wordtrainer.ui.flashcards.FlashcardsFragment
 import com.example.wordtrainer.ui.quiz.QuizFragment
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_coach -> { startActivity(Intent(this, CoachActivity::class.java)); true }
         R.id.action_direction -> { toggleDirection(); true }
         R.id.action_dictionary -> { startActivity(Intent(this, DictionaryActivity::class.java)); true }
         R.id.action_settings -> { startActivity(Intent(this, SettingsActivity::class.java)); true }

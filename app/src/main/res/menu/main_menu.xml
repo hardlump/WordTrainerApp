@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_coach"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/menu_coach"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_direction"
         android:icon="@drawable/ic_swap"
         android:title="@string/menu_direction"

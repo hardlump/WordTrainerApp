@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_coach_lessons"
+        android:icon="@drawable/ic_book"
+        android:title="@string/coach_lessons"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_coach_smart"
+        android:icon="@drawable/ic_dice"
+        android:title="@string/coach_smart"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_coach_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/coach_settings_title"
+        app:showAsAction="ifRoom" />
+</menu>

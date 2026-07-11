@@ -209,4 +209,41 @@
     <string name="ui_lang_system">System</string>
     <string name="ui_lang_ru">Русский</string>
     <string name="ui_lang_en">English</string>
+
+    <!-- AI Coach -->
+    <string name="coach_title">AI Coach</string>
+    <string name="menu_coach">AI Coach</string>
+    <string name="coach_chat_hint">Type a message…</string>
+    <string name="coach_hold_to_speak">Hold to speak</string>
+    <string name="coach_release_to_send">Release to send</string>
+    <string name="coach_slide_to_cancel">Slide to cancel</string>
+    <string name="coach_thinking">Teacher is thinking…</string>
+    <string name="coach_lessons">Lessons</string>
+    <string name="coach_smart">Build the sentence</string>
+    <string name="coach_settings_title">AI settings</string>
+    <string name="coach_search_lessons">Search lessons…</string>
+    <string name="coach_filter_all">All</string>
+    <string name="coach_filter_todo">To do</string>
+    <string name="coach_filter_done">Done</string>
+    <string name="coach_lesson_progress">Lesson progress</string>
+    <string name="coach_lesson_complete">Lesson complete!</string>
+    <string name="coach_finish_lesson">FINISH LESSON</string>
+    <string name="coach_no_lessons">No lessons found</string>
+    <string name="coach_check">CHECK</string>
+    <string name="coach_next">NEXT</string>
+    <string name="coach_finish_exercise">FINISH</string>
+    <string name="coach_correct">Correct! 🎉</string>
+    <string name="coach_wrong">Wrong. Correct: %1$s</string>
+    <string name="coach_hint">Hint</string>
+    <string name="coach_exercise_done">Exercise finished!</string>
+    <string name="coach_mode_local">Use local model</string>
+    <string name="coach_field_key">Groq API Key</string>
+    <string name="coach_field_ip">Server IP (e.g. 192.168.1.100)</string>
+    <string name="coach_field_model">Model name</string>
+    <string name="coach_field_prompt">Teacher persona prompt</string>
+    <string name="coach_clear_history">Clear chat history</string>
+    <string name="coach_error">Error: %1$s</string>
+    <string name="coach_mic_denied">Microphone access is required</string>
+    <string name="coach_translate">Translate</string>
+    <string name="coach_speak">Speak</string>
 </resources>

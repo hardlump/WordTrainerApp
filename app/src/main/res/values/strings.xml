@@ -210,4 +210,41 @@
     <string name="ui_lang_system">Системный</string>
     <string name="ui_lang_ru">Русский</string>
     <string name="ui_lang_en">English</string>
+
+    <!-- ИИ-коуч -->
+    <string name="coach_title">ИИ-коуч</string>
+    <string name="menu_coach">ИИ-коуч</string>
+    <string name="coach_chat_hint">Введите сообщение…</string>
+    <string name="coach_hold_to_speak">Удерживайте, чтобы говорить</string>
+    <string name="coach_release_to_send">Отпустите, чтобы отправить</string>
+    <string name="coach_slide_to_cancel">Смахните, чтобы отменить</string>
+    <string name="coach_thinking">Учитель думает…</string>
+    <string name="coach_lessons">Уроки</string>
+    <string name="coach_smart">Собери предложение</string>
+    <string name="coach_settings_title">Настройки ИИ</string>
+    <string name="coach_search_lessons">Поиск занятий…</string>
+    <string name="coach_filter_all">Все</string>
+    <string name="coach_filter_todo">К изучению</string>
+    <string name="coach_filter_done">Пройдено</string>
+    <string name="coach_lesson_progress">Прогресс урока</string>
+    <string name="coach_lesson_complete">Урок пройден!</string>
+    <string name="coach_finish_lesson">ЗАВЕРШИТЬ УРОК</string>
+    <string name="coach_no_lessons">Занятия не найдены</string>
+    <string name="coach_check">ПРОВЕРИТЬ</string>
+    <string name="coach_next">ДАЛЕЕ</string>
+    <string name="coach_finish_exercise">ЗАВЕРШИТЬ</string>
+    <string name="coach_correct">Верно! 🎉</string>
+    <string name="coach_wrong">Неверно. Правильно: %1$s</string>
+    <string name="coach_hint">Подсказка</string>
+    <string name="coach_exercise_done">Упражнение завершено!</string>
+    <string name="coach_mode_local">Локальная модель</string>
+    <string name="coach_field_key">Groq API Key</string>
+    <string name="coach_field_ip">IP сервера (напр. 192.168.1.100)</string>
+    <string name="coach_field_model">Название модели</string>
+    <string name="coach_field_prompt">Промпт-персона учителя</string>
+    <string name="coach_clear_history">Очистить историю чата</string>
+    <string name="coach_error">Ошибка: %1$s</string>
+    <string name="coach_mic_denied">Нужен доступ к микрофону</string>
+    <string name="coach_translate">Перевести</string>
+    <string name="coach_speak">Озвучить</string>
 </resources>
