@@ -58,11 +58,14 @@
 Чтобы включить инференс GGUF прямо на телефоне:
 
 1. Установите **NDK** и **CMake** (Android Studio → SDK Manager → SDK Tools).
-2. Добавьте llama.cpp сабмодулем и зафиксируйте проверенный тег:
+2. Добавьте llama.cpp сабмодулем и зафиксируйте тег, под который сверён мост
+   (`llama_bridge.cpp` соответствует API на **b9957**):
    ```
-   git submodule add https://github.com/ggerganov/llama.cpp app/src/main/cpp/llama.cpp
-   cd app/src/main/cpp/llama.cpp && git checkout <проверенный тег> && cd -
+   git submodule add https://github.com/ggml-org/llama.cpp app/src/main/cpp/llama.cpp
+   cd app/src/main/cpp/llama.cpp && git checkout b9957 && cd -
    ```
+   Более свежий тег тоже подойдёт, если API совместим; при ошибках компиляции
+   об именах функций возьмите ровно b9957 или поправьте пару имён в мосте.
 3. В `app/build.gradle.kts` раскомментируйте блоки `ndk { abiFilters ... }`,
    `ndkVersion` и `externalNativeBuild { cmake { ... } }`.
 4. Пересоберите. Kotlin-обёртка — `data/coach/LlamaEngine.kt`, JNI-мост и CMake —

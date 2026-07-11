@@ -5,7 +5,7 @@
 //   nativeGenerate(handle, prompt, nPredict) : String
 //   nativeFree(handle)
 //
-// Ориентирован на недавний API llama.cpp (рефактор vocab: llama_vocab_*).
+// Сверено с API llama.cpp на теге b9957 (не-deprecated имена).
 // Декодирование — жадное (argmax), чтобы не зависеть от меняющегося sampler-API.
 // При смене тега llama.cpp могут потребоваться мелкие правки имён функций.
 
@@ -48,15 +48,15 @@ Java_com_example_wordtrainer_data_coach_LlamaEngine_nativeLoadModel(
     llama_model_params mparams = llama_model_default_params();
     mparams.n_gpu_layers = 0; // CPU; для Vulkan-делегата собрать llama.cpp с GGML_VULKAN
 
-    llama_model *model = llama_load_model_from_file(cpath, mparams);
+    llama_model *model = llama_model_load_from_file(cpath, mparams);
     env->ReleaseStringUTFChars(path, cpath);
     if (model == nullptr) { LOGe("model load failed"); return 0; }
 
     llama_context_params cparams = llama_context_default_params();
     cparams.n_ctx = (uint32_t) nCtx;
 
-    llama_context *ctx = llama_new_context_with_model(model, cparams);
-    if (ctx == nullptr) { LOGe("ctx create failed"); llama_free_model(model); return 0; }
+    llama_context *ctx = llama_init_from_model(model, cparams);
+    if (ctx == nullptr) { LOGe("ctx create failed"); llama_model_free(model); return 0; }
 
     auto *s = new LlamaSession{model, ctx, nCtx};
     return reinterpret_cast<jlong>(s);
@@ -115,6 +115,6 @@ Java_com_example_wordtrainer_data_coach_LlamaEngine_nativeFree(
     auto *s = reinterpret_cast<LlamaSession *>(handle);
     if (s == nullptr) return;
     if (s->ctx) llama_free(s->ctx);
-    if (s->model) llama_free_model(s->model);
+    if (s->model) llama_model_free(s->model);
     delete s;
 }
