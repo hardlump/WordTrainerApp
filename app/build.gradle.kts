@@ -25,6 +25,14 @@ android {
         // ndk {
         //     abiFilters += listOf("arm64-v8a")
         // }
+        // externalNativeBuild {
+        //     cmake {
+        //         // ВАЖНО: собирать llama.cpp оптимизированно даже в debug APK.
+        //         // Без этого ggml компилируется с -O0 и инференс медленнее в десятки раз.
+        //         arguments += listOf("-DCMAKE_BUILD_TYPE=Release")
+        //         cppFlags += "-O3"
+        //     }
+        // }
     }
 
     // ndkVersion = "26.3.11579264"
