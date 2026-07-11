@@ -65,14 +65,47 @@ Java_com_example_wordtrainer_data_coach_LlamaEngine_nativeLoadModel(
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_example_wordtrainer_data_coach_LlamaEngine_nativeGenerate(
-        JNIEnv *env, jobject /*thiz*/, jlong handle, jstring prompt, jint nPredict) {
+        JNIEnv *env, jobject /*thiz*/, jlong handle,
+        jobjectArray roles, jobjectArray contents, jint nPredict) {
     auto *s = reinterpret_cast<LlamaSession *>(handle);
     if (s == nullptr) return env->NewStringUTF("");
 
     const llama_vocab *vocab = llama_model_get_vocab(s->model);
-    const char *cprompt = env->GetStringUTFChars(prompt, nullptr);
-    std::string text(cprompt);
-    env->ReleaseStringUTFChars(prompt, cprompt);
+
+    // Собираем сообщения чата из Java-массивов.
+    int n_msg = env->GetArrayLength(roles);
+    std::vector<std::string> role_store(n_msg), content_store(n_msg);
+    std::vector<llama_chat_message> msgs(n_msg);
+    for (int i = 0; i < n_msg; ++i) {
+        auto jr = (jstring) env->GetObjectArrayElement(roles, i);
+        auto jc = (jstring) env->GetObjectArrayElement(contents, i);
+        const char *rc = env->GetStringUTFChars(jr, nullptr);
+        const char *cc = env->GetStringUTFChars(jc, nullptr);
+        role_store[i] = rc;
+        content_store[i] = cc;
+        env->ReleaseStringUTFChars(jr, rc);
+        env->ReleaseStringUTFChars(jc, cc);
+        env->DeleteLocalRef(jr);
+        env->DeleteLocalRef(jc);
+    }
+    for (int i = 0; i < n_msg; ++i) {
+        msgs[i].role = role_store[i].c_str();
+        msgs[i].content = content_store[i].c_str();
+    }
+
+    // Применяем родной шаблон чата модели (из GGUF); add_ass=true — приглашение ассистента.
+    const char *tmpl = llama_model_chat_template(s->model, nullptr);
+    if (tmpl == nullptr) tmpl = "chatml";
+    std::vector<char> fbuf(8192);
+    int32_t need = llama_chat_apply_template(tmpl, msgs.data(), msgs.size(), true,
+                                             fbuf.data(), (int) fbuf.size());
+    if (need < 0) { LOGe("chat template apply failed"); return env->NewStringUTF(""); }
+    if (need > (int) fbuf.size()) {
+        fbuf.resize(need);
+        need = llama_chat_apply_template(tmpl, msgs.data(), msgs.size(), true,
+                                         fbuf.data(), (int) fbuf.size());
+    }
+    std::string text(fbuf.data(), need);
 
     // Токенизация промпта.
     int n_max = (int) text.size() + 16;

@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.io.File
 
 /**
  * Инференс GGUF-модели прямо на устройстве через llama.cpp (JNI).
@@ -19,6 +20,7 @@ class LlamaEngine {
     private val mutex = Mutex()
     private var handle: Long = 0L
     private var loadedPath: String? = null
+    private var loadedStamp: Long = 0L
 
     suspend fun complete(messages: List<CoachMessage>, modelPath: String?): String =
         withContext(Dispatchers.Default) {
@@ -26,27 +28,23 @@ class LlamaEngine {
             require(!modelPath.isNullOrBlank()) { "Модель GGUF не выбрана" }
             mutex.withLock {
                 ensureLoaded(modelPath)
-                nativeGenerate(handle, buildPrompt(messages), N_PREDICT).trim()
+                // Шаблон чата применяет нативная часть (родной шаблон модели из GGUF).
+                val roles = Array(messages.size) { messages[it].role }
+                val contents = Array(messages.size) { messages[it].content }
+                nativeGenerate(handle, roles, contents, N_PREDICT).trim()
             }
         }
 
     private fun ensureLoaded(path: String) {
-        if (handle != 0L && path == loadedPath) return
+        // Импорт перезаписывает файл под тем же именем — поэтому ключ кэша это путь
+        // И время изменения: смена модели подхватывается без перезапуска приложения.
+        val stamp = File(path).lastModified()
+        if (handle != 0L && path == loadedPath && stamp == loadedStamp) return
         if (handle != 0L) { nativeFree(handle); handle = 0L }
         handle = nativeLoadModel(path, N_CTX)
         check(handle != 0L) { "Не удалось загрузить модель: $path" }
         loadedPath = path
-    }
-
-    /** Простой ChatML-совместимый шаблон; при необходимости уточняется под модель. */
-    private fun buildPrompt(messages: List<CoachMessage>): String {
-        val sb = StringBuilder()
-        for (m in messages) {
-            sb.append("<|im_start|>").append(m.role).append('\n')
-                .append(m.content).append("<|im_end|>\n")
-        }
-        sb.append("<|im_start|>assistant\n")
-        return sb.toString()
+        loadedStamp = stamp
     }
 
     fun close() {
@@ -55,7 +53,9 @@ class LlamaEngine {
 
     // --- JNI (реализация в app/src/main/cpp/llama_bridge.cpp) ---
     private external fun nativeLoadModel(path: String, nCtx: Int): Long
-    private external fun nativeGenerate(handle: Long, prompt: String, nPredict: Int): String
+    private external fun nativeGenerate(
+        handle: Long, roles: Array<String>, contents: Array<String>, nPredict: Int
+    ): String
     private external fun nativeFree(handle: Long)
 
     companion object {
