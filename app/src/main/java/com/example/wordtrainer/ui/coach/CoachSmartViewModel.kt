@@ -18,7 +18,9 @@ data class SmartState(
     val isLoading: Boolean = false,
     val isChecked: Boolean = false,
     val isCorrect: Boolean = false,
-    val wordCorrect: List<Boolean> = emptyList() // корректность по позициям selection
+    val wordCorrect: List<Boolean> = emptyList(), // корректность по позициям selection
+    val solved: Int = 0,                          // сколько предложений собрано верно
+    val finished: Boolean = false                 // сессия из SESSION_SIZE завершена
 ) {
     val usedOptions: Set<Int> get() = selection.toSet()
 }
@@ -36,21 +38,37 @@ class CoachSmartViewModel(private val repo: CoachRepository) : ViewModel() {
     val errors: SharedFlow<String> = _errors.asSharedFlow()
 
     fun loadNext() {
-        _state.value = SmartState(isLoading = true)
+        val solved = _state.value.solved
+        _state.value = SmartState(isLoading = true, solved = solved)
         viewModelScope.launch {
             try {
                 val ex = repo.generateExercise()
                 if (ex != null) {
-                    _state.value = SmartState(exercise = ex)
+                    _state.value = SmartState(exercise = ex, solved = solved)
                 } else {
-                    _state.value = SmartState()
+                    _state.value = SmartState(solved = solved)
                     _errors.tryEmit("parse")
                 }
             } catch (e: Exception) {
-                _state.value = SmartState()
+                _state.value = SmartState(solved = solved)
                 _errors.tryEmit(e.localizedMessage ?: "network error")
             }
         }
+    }
+
+    /** Переход к следующему предложению либо завершение после SESSION_SIZE. */
+    fun next() {
+        if (_state.value.solved >= SESSION_SIZE) {
+            _state.value = _state.value.copy(finished = true)
+        } else {
+            loadNext()
+        }
+    }
+
+    /** Новая сессия с нуля. */
+    fun restart() {
+        _state.value = SmartState()
+        loadNext()
     }
 
     fun selectWord(optionIndex: Int) {
@@ -97,9 +115,18 @@ class CoachSmartViewModel(private val repo: CoachRepository) : ViewModel() {
             correctWords.getOrNull(index) == exercise.options[optIndex]
         }
         val correct = statuses.all { it } && s.selection.size == correctWords.size
-        _state.value = s.copy(isChecked = true, isCorrect = correct, wordCorrect = statuses)
+        _state.value = s.copy(
+            isChecked = true,
+            isCorrect = correct,
+            wordCorrect = statuses,
+            solved = if (correct) s.solved + 1 else s.solved
+        )
     }
 
     private fun correctWords(exercise: SentenceExercise): List<String> =
         exercise.correctAnswer.replace(Regex("[.!?,]"), "").trim().split(" ").filter { it.isNotEmpty() }
+
+    companion object {
+        const val SESSION_SIZE = 10
+    }
 }

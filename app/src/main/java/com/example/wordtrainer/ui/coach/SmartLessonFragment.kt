@@ -39,8 +39,9 @@ class SmartLessonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.hintBtn.setOnClickListener { vm.giveHint() }
         binding.actionBtn.setOnClickListener {
-            if (vm.state.value.isChecked) vm.loadNext() else vm.check()
+            if (vm.state.value.isChecked) vm.next() else vm.check()
         }
+        binding.restartBtn.setOnClickListener { vm.restart() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -57,8 +58,19 @@ class SmartLessonFragment : Fragment() {
     }
 
     private fun render(state: SmartState) {
+        if (state.finished) {
+            binding.loading.visibility = View.GONE
+            binding.contentPanel.visibility = View.INVISIBLE
+            binding.donePanel.visibility = View.VISIBLE
+            binding.doneScore.text =
+                getString(R.string.coach_exercise_score, state.solved, CoachSmartViewModel.SESSION_SIZE)
+            return
+        }
+
+        binding.donePanel.visibility = View.GONE
         binding.loading.visibility = if (state.isLoading) View.VISIBLE else View.GONE
         binding.contentPanel.visibility = if (state.isLoading) View.INVISIBLE else View.VISIBLE
+        binding.progressBar.setProgressCompat(state.solved, true)
         val exercise = state.exercise ?: return
 
         binding.questionText.text = exercise.question

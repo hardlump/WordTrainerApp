@@ -235,6 +235,8 @@
     <string name="coach_wrong">Неверно. Правильно: %1$s</string>
     <string name="coach_hint">Подсказка</string>
     <string name="coach_exercise_done">Упражнение завершено!</string>
+    <string name="coach_exercise_score">Собрано предложений: %1$d из %2$d</string>
+    <string name="coach_restart">Заново</string>
     <string name="coach_mode_on_device">Модель на устройстве (GGUF)</string>
     <string name="coach_import_model">Импортировать GGUF</string>
     <string name="coach_model_none">Модель не выбрана</string>
