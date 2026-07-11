@@ -17,6 +17,7 @@
 
 #define LOG_TAG "llamabridge"
 #define LOGe(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+#define LOGi(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 
 namespace {
 
@@ -27,6 +28,11 @@ struct LlamaSession {
 };
 
 bool g_backend_ready = false;
+
+// Пробрасываем собственные логи llama.cpp/ggml в logcat (тег "llama.cpp").
+void bridge_log_cb(ggml_log_level level, const char *text, void * /*ud*/) {
+    __android_log_print(ANDROID_LOG_INFO, "llama.cpp", "%s", text);
+}
 
 std::string token_to_text(const llama_vocab *vocab, llama_token tok) {
     char buf[256];
@@ -41,7 +47,11 @@ extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_example_wordtrainer_data_coach_LlamaEngine_nativeLoadModel(
         JNIEnv *env, jobject /*thiz*/, jstring path, jint nCtx) {
-    if (!g_backend_ready) { llama_backend_init(); g_backend_ready = true; }
+    if (!g_backend_ready) {
+        llama_log_set(bridge_log_cb, nullptr);
+        llama_backend_init();
+        g_backend_ready = true;
+    }
 
     const char *cpath = env->GetStringUTFChars(path, nullptr);
 
@@ -106,6 +116,10 @@ Java_com_example_wordtrainer_data_coach_LlamaEngine_nativeGenerate(
                                          fbuf.data(), (int) fbuf.size());
     }
     std::string text(fbuf.data(), need);
+    LOGi("PROMPT >>>\n%s", text.c_str());
+
+    // Каждый запрос стартует с чистого контекста (мы всегда шлём полную историю).
+    llama_memory_clear(llama_get_memory(s->ctx), true);
 
     // Токенизация промпта.
     int n_max = (int) text.size() + 16;
@@ -138,6 +152,7 @@ Java_com_example_wordtrainer_data_coach_LlamaEngine_nativeGenerate(
         if (llama_decode(s->ctx, next) != 0) break;
     }
 
+    LOGi("OUTPUT <<<\n%s", out.c_str());
     return env->NewStringUTF(out.c_str());
 }
 
