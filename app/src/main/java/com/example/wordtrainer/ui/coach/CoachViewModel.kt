@@ -84,8 +84,7 @@ class CoachViewModel(
                 val toSend = target.toMutableList()
                 if (inLesson && target.count { it.role != "system" } >= MAX_LESSON_MESSAGES - 1) {
                     val last = toSend.last()
-                    val instruction = if (settings.isLocal) LOCAL_FINAL_PROMPT else GROQ_FINAL_PROMPT
-                    toSend[toSend.lastIndex] = last.copy(content = last.content + instruction)
+                    toSend[toSend.lastIndex] = last.copy(content = last.content + FINAL_PROMPT)
                 }
                 val reply = repo.complete(toSend)
                 if (reply.isNotEmpty()) {
@@ -221,11 +220,8 @@ class CoachViewModel(
 
     private companion object {
         const val MAX_LESSON_MESSAGES = 15
-        const val GROQ_FINAL_PROMPT =
-            "\n\n[SYSTEM: Lesson finished. Summarize the STUDENT'S English mistakes " +
-                "(grammar/vocab) and end with LESSON COMPLETE.]"
-        const val LOCAL_FINAL_PROMPT =
-            "[SYSTEM CRITICAL INSTRUCTION]: This is your LAST response. 1. Do NOT ask any more questions. " +
+        const val FINAL_PROMPT =
+            "\n\n[SYSTEM CRITICAL INSTRUCTION]: This is your LAST response. 1. Do NOT ask any more questions. " +
                 "2. Write \"LESSON COMPLETE\" in capital letters. 3. Summarize my vocabulary and grammar mistakes. " +
                 "4. Say goodbye."
     }

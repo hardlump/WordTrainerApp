@@ -8,33 +8,26 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 /**
- * Доступ к ИИ (Groq или локальный OpenAI-совместимый сервер). Держит один
- * закэшированный Retrofit/OkHttp и пересоздаёт его только при смене
- * baseUrl/ключа, а не на каждый запрос.
+ * Единая точка ИИ-инференса. Маршрутизирует запрос в зависимости от режима:
+ * - [CoachMode.ON_DEVICE]   — llama.cpp прямо на телефоне ([LlamaEngine]);
+ * - [CoachMode.LOCAL_SERVER] — HTTP к OpenAI-совместимому серверу в сети.
  */
 class CoachRepository(private val settings: CoachSettingsStore) {
+
+    private val llama by lazy { LlamaEngine() }
 
     private var cachedApi: CoachApi? = null
     private var cacheKey: String? = null
 
     private fun api(): CoachApi {
-        val key = "${settings.baseUrl}|${settings.isLocal}|${settings.groqApiKey.value}"
+        val key = settings.baseUrl
         cachedApi?.let { if (key == cacheKey) return it }
 
-        val client = OkHttpClient.Builder().apply {
-            connectTimeout(60, TimeUnit.SECONDS)
-            readTimeout(120, TimeUnit.SECONDS)
-            writeTimeout(60, TimeUnit.SECONDS)
-            if (!settings.isLocal) {
-                val token = settings.groqApiKey.value
-                addInterceptor { chain ->
-                    val req = chain.request().newBuilder()
-                        .addHeader("Authorization", "Bearer $token")
-                        .build()
-                    chain.proceed(req)
-                }
-            }
-        }.build()
+        val client = OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
 
         val api = Retrofit.Builder()
             .baseUrl(settings.baseUrl)
@@ -49,9 +42,12 @@ class CoachRepository(private val settings: CoachSettingsStore) {
     }
 
     /** Один запрос к модели с произвольным набором сообщений. */
-    suspend fun complete(messages: List<CoachMessage>): String = withContext(Dispatchers.IO) {
-        val response = api().getCompletion(CoachChatRequest(settings.currentModel, messages))
-        response.choices.firstOrNull()?.message?.content?.trim().orEmpty()
+    suspend fun complete(messages: List<CoachMessage>): String = when (settings.mode.value) {
+        CoachMode.ON_DEVICE -> llama.complete(messages, settings.modelUri.value)
+        CoachMode.LOCAL_SERVER -> withContext(Dispatchers.IO) {
+            val response = api().getCompletion(CoachChatRequest(settings.serverModel.value, messages))
+            response.choices.firstOrNull()?.message?.content?.trim().orEmpty()
+        }
     }
 
     /** Расстановка пунктуации в тексте после голосового ввода (без правки слов). */
@@ -81,4 +77,6 @@ class CoachRepository(private val settings: CoachSettingsStore) {
         val response = complete(listOf(CoachMessage("user", prompt)))
         return CoachExerciseParser.parse(response)
     }
+
+    fun close() = llama.close()
 }

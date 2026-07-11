@@ -2,7 +2,7 @@ package com.example.wordtrainer.data.coach
 
 /**
  * Модели ИИ-коуча. Формат запроса/ответа совместим с OpenAI Chat Completions
- * (Groq в облаке и локальные серверы вроде LM Studio/Ollama используют его же).
+ * (локальные серверы вроде LM Studio/Ollama используют его же).
  *
  * Этот пакет намеренно изолирован от словарной части (Room, WordEntity и т.д.):
  * общение с ИИ и тренировка слов не пересекаются.
@@ -46,5 +46,9 @@ data class SentenceExercise(
     val explanation: String?    // подсказка/пояснение от ИИ
 )
 
-/** Источник модели ИИ. */
-enum class CoachMode { CLOUD, LOCAL }
+/**
+ * Источник модели ИИ:
+ * - [ON_DEVICE] — модель (GGUF) запускается прямо на телефоне через llama.cpp;
+ * - [LOCAL_SERVER] — HTTP к OpenAI-совместимому серверу в сети (LM Studio/Ollama на ПК).
+ */
+enum class CoachMode { ON_DEVICE, LOCAL_SERVER }

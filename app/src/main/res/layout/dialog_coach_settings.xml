@@ -12,35 +12,78 @@
         android:paddingVertical="8dp">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/localSwitch"
+            android:id="@+id/onDeviceSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/coach_mode_local"
+            android:text="@string/coach_mode_on_device"
             android:textColor="@color/text_primary" />
 
-        <EditText
-            android:id="@+id/keyOrIpInput"
+        <!-- Режим: модель на устройстве (GGUF) -->
+        <LinearLayout
+            android:id="@+id/onDeviceSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="@string/coach_field_key"
-            android:inputType="text"
-            android:maxLines="1"
-            android:importantForAutofill="no"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_secondary" />
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:visibility="gone">
 
-        <EditText
-            android:id="@+id/modelInput"
+            <TextView
+                android:id="@+id/modelNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/coach_model_none"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/importModelBtn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/coach_import_model"
+                app:icon="@drawable/ic_add" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/coach_model_hint"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Режим: локальный сервер по сети -->
+        <LinearLayout
+            android:id="@+id/serverSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="@string/coach_field_model"
-            android:inputType="text"
-            android:maxLines="1"
-            android:importantForAutofill="no"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_secondary" />
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/ipInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/coach_field_ip"
+                android:inputType="text"
+                android:maxLines="1"
+                android:importantForAutofill="no"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary" />
+
+            <EditText
+                android:id="@+id/serverModelInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="@string/coach_field_model"
+                android:inputType="text"
+                android:maxLines="1"
+                android:importantForAutofill="no"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/promptInput"

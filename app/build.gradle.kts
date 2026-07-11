@@ -17,7 +17,23 @@ android {
         versionName = "4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // --- On-device движок (llama.cpp) ---
+        // Раскомментируйте после установки NDK и добавления сабмодуля llama.cpp
+        // (см. README, раздел «On-device движок»). Иначе приложение собирается
+        // без нативной части, а режим «модель на устройстве» сообщает о недоступности.
+        // ndk {
+        //     abiFilters += listOf("arm64-v8a")
+        // }
     }
+
+    // ndkVersion = "26.3.11579264"
+    // externalNativeBuild {
+    //     cmake {
+    //         path = file("src/main/cpp/CMakeLists.txt")
+    //         version = "3.22.1"
+    //     }
+    // }
 
     buildTypes {
         release {
